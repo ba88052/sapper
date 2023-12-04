@@ -3,8 +3,7 @@ import json
 
 from flask import Blueprint, g, make_response, request
 
-from application.sapper_application_service import \
-    ScoutApplicaionService
+from application.sapper_application_service import SapperApplicaionService
 
 # 會吃main.py的flask啟動設定
 routes = Blueprint("routes", __name__)
@@ -27,15 +26,15 @@ def get_pubsub_message():
     return None
 
 
-@routes.route("/scout/execute_collect_mission", methods=["POST"])
+@routes.route("/sapper/execute_table_transform_task", methods=["POST"])
 def execute_collect_mission():
     """
     專門用來接收pub/sub的訊息，觸發將傳入範圍切小後打出去的接口
     """
     order_dict = get_pubsub_message()
     print("AAAA")
-    ScoutApplicaionService(
-        message=order_dict, application_infra_respository=g.APPLICATION_INFRA__ADAPTOR
+    SapperApplicaionService(
+        message=order_dict, application_infra_respository=g.APPLICATION_INFRA_ADAPTOR
     ).execute_task()
     print("PPPPP")
     return make_response((f"success", 204))

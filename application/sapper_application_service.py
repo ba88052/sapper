@@ -6,7 +6,7 @@ import traceback
 from flask import g
 
 
-class ScoutApplicaionService:
+class SapperApplicaionService:
     def __init__(self, message, application_infra_respository=ApplicationInfraPort()):
         """_summary_
 

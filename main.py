@@ -17,7 +17,7 @@ app.register_blueprint(api_routes.routes)
 
 @app.before_request
 def setup_global_objects():
-    g.APPLICATION_INFRA__ADAPTOR = ApplicationRespositoryAdapter()
+    g.APPLICATION_INFRA_ADAPTOR = ApplicationRespositoryAdapter()
     g.DOMAIN_INFRA_ADAPTER = DomainRespositoryAdapter()
 
 
