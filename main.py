@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, g, request
+from domain.service.amadeus import start
 
 from infrastructure.application_infra_adapter import \
     ApplicationRespositoryAdapter
@@ -24,4 +25,5 @@ def setup_global_objects():
 
 
 if __name__ == "__main__":
+    start()
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

@@ -26,7 +26,7 @@ class ScoutApplicaionService:
             SOURCE_TABLE_PATH = message["source_table_path"],
             DESTINATION_TABLE_PATH = message["destination_table_path"],
             TASK_STATUS = message["task_status"],
-            USE_GENERAL_TEMP_TABLE = message["use_general_temp_table"],
+            USE_GENERAL_TMP_TABLE = message["use_general_tmp_table"],
         )
         self.report_message = message
         self.request_message.TASK_STATUS = "Process"
@@ -48,14 +48,20 @@ class ScoutApplicaionService:
             )
 
             # 將 order_data 丟入 task 中執行任務
-            destination_data_dict_list = task.execute(order_data = self.request_message.ORDER_DATA,
+            general_tmp_data_entity = task.execute(order_data = self.request_message.ORDER_DATA,
                                                 source_table_path = self.request_message.SOURCE_TABLE_PATH,
                                                 previous_task_id = self.report_message.PREVIOUS_TASK_ID)
-            print(destination_data_dict_list)
+            print(general_tmp_data_entity.TMP_DATA)
 
-            # 將 destination_data  存起來
-            self.application_infra_respository.save_destination_data_list(destination_table_path = self.request_message.DESTINATION_TABLE_PATH, 
-                                                              destination_data_dict_list = destination_data_dict_list)
+            general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID,
+            general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
+            general_tmp_data_entity.TASK_NAME = self.request_message.TASK_NAME
+            general_tmp_data_entity.TASK_ID = self.request_message.TASK_ID
+
+            self.application_infra_respository.save_destination_data_list(
+                                                            destination_table_path = self.request_message.DESTINATION_TABLE_PATH, 
+                                                            general_tmp_data_entity = general_tmp_data_entity,
+                                                            use_tmp_table = self.request_message.USE_GENERAL_TMP_TABLE)
             self.report_message["task_status"] = "Success"
 
         except Exception as e:

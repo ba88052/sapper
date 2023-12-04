@@ -1,13 +1,14 @@
 class ApplicationInfraPort:
-    def save_destination_data_list(self, destination_table_path, destination_data_dict_list):
+    def save_destination_data(self, destination_table_path, general_tmp_data_entity, use_tmp_table):
         """把實體化後的Entity資料，存入DB
 
         Args:
-            raw_table_path(str): 要把raw_data存進去的表格路徑
-            raw_data (class): 參照服務對應的raw_data_entity
+            destination_table_path(str): 要存進去的表格路徑
+            general_tmp_data_entity (class): 要存進去的資料 entity 
+            use_tmp_table(str): 是否使用 tmp 表
         """
         pass
-
+        
     def report_task_completed(self, report_return_path, report_message):
         """做完動作後，將完成task的訊息傳出
 

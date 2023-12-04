@@ -15,8 +15,8 @@ class RequestMessage:
         DESTINATION_TABLE_PATH: str,
         TASK_STATUS: str,
         USE_GENERAL_TEMP_TABLE: str,
-        BQ_CREATED_TIME: datetime,
-        BQ_UPDATED_TIME: datetime
+        BQ_CREATED_TIME: str,
+        BQ_UPDATED_TIME: str
     ):
         """
         初始化 RequestMessage 物件，設定各項任務相關參數。
@@ -48,5 +48,5 @@ class RequestMessage:
         self.DESTINATION_TABLE_PATH = DESTINATION_TABLE_PATH
         self.TASK_STATUS = TASK_STATUS
         self.USE_GENERAL_TEMP_TABLE = USE_GENERAL_TEMP_TABLE
-        self.BQ_CREATED_TIME = BQ_CREATED_TIME if BQ_CREATED_TIME else datetime.now()
-        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME if BQ_UPDATED_TIME else datetime.now()
+        self.BQ_CREATED_TIME = BQ_CREATED_TIME 
+        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME 

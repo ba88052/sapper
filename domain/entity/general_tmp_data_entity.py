@@ -1,16 +1,16 @@
 from datetime import datetime
 
-class GeneralTempTable:
+class GeneralTmpData:
     def __init__(
         self,
         UUID_Request: str = "",
         MISSION_NAME: str = "",
         TASK_ID : str = "",
         TASK_NAME: str = "",
-        TEMP_DATA: str = "",
+        TMP_DATA: list = [],
         TASK_SEQUENCE: str = "",
-        BQ_CREATED_TIME: datetime = datetime.now(),
-        BQ_UPDATED_TIME: datetime = datetime.now()
+        BQ_CREATED_TIME: str = "",
+        BQ_UPDATED_TIME: str = ""
     ):
         """
         定義 RawTable 實體的參數。
@@ -27,7 +27,7 @@ class GeneralTempTable:
         self.MISSION_NAME = MISSION_NAME
         self.TASK_ID = TASK_ID
         self.TASK_NAME = TASK_NAME
-        self.TEMP_DATA = TEMP_DATA
+        self.TMP_DATA = TMP_DATA
         self.TASK_SEQUENCE = TASK_SEQUENCE
-        self.BQ_CREATED_TIME = BQ_CREATED_TIME if BQ_CREATED_TIME else datetime.now()
-        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME if BQ_UPDATED_TIME else datetime.now()
+        self.BQ_CREATED_TIME = BQ_CREATED_TIME 
+        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME 

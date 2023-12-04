@@ -1,5 +1,6 @@
 from domain.service.task.task import Task
 from domain.domain_infra_port import DomainInfraPort
+from domain.service.general_tmp_domain_service import GeneralTmpDataDomainService
 from datetime import datetime
 import json
 
@@ -11,7 +12,7 @@ class CustomizeSelect(Task):
         self.infra_respository = domain_infra_respository
         self.config_file = self.infra_respository.get_config()["call_seon_fraud_api"]
 
-    def execute(self, source_table_path, conditions=None):
+    def execute(self, order_data, source_table_path, previous_task_id):
         """
         客製化查詢
 
@@ -20,13 +21,12 @@ class CustomizeSelect(Task):
             conditions (_type_, optional): 篩選條件
 
         Returns:
-            dict: 回傳資料
+            list: 回傳資料
         """
-        # 基本查詢
-        query = f"SELECT * FROM `{source_table_path}`"
-
-        # 添加條件
-        if conditions:
-            query += " WHERE " + " ".join(conditions)
-        result_data =  self.infra_respository.run_query(query)
-        return result_data
+        conditions = order_data["select_conditions"]
+        result_data_list =  self.infra_respository.customize_select_from_source_table(source_table_path = source_table_path, 
+                                                                                 conditions = conditions)
+        general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
+            TMP_DATA = result_data_list
+        )
+        return general_tmp_data_entity
