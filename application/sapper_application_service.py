@@ -18,6 +18,7 @@ class ScoutApplicaionService:
             ORDER_DATA = message["order_data"],
             MISSION_NAME = message["mission_name"],
             MISSION_ID = message["mission_id"],
+            PREVIOUS_TASK_ID = message["previous_task_id"],
             TASK_ID = message["task_id"],
             TASK_NAME = message["task_name"],
             TASK_SEQUENCE = message["task_sequence"],
@@ -49,11 +50,11 @@ class ScoutApplicaionService:
             # 將 order_data 丟入 task 中執行任務
             destination_data_dict_list = task.execute(order_data = self.request_message.ORDER_DATA,
                                                 source_table_path = self.request_message.SOURCE_TABLE_PATH,
-                                                use_general_temp_table = self.request_message.USE_GENERAL_TEMP_TABLE)
+                                                previous_task_id = self.report_message.PREVIOUS_TASK_ID)
             print(destination_data_dict_list)
 
             # 將 destination_data  存起來
-            self.infra_respository.save_destination_data_list(destination_table_path = self.request_message.DESTINATION_TABLE_PATH, 
+            self.application_infra_respository.save_destination_data_list(destination_table_path = self.request_message.DESTINATION_TABLE_PATH, 
                                                               destination_data_dict_list = destination_data_dict_list)
             self.report_message["task_status"] = "Success"
 

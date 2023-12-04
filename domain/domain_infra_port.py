@@ -13,18 +13,22 @@ class DomainInfraPort:
         """
         raise NotImplementedError
     
-    def run_query(self):
+    def customize_select_from_source_table(self, source_table_path, conditions):
         """
-        跑 query
+        客製化查詢source_table
+
+        Args:
+            source_table_path (_type_): _description_
+            conditions (_type_): _description_
         """
         pass
 
-    def get_table_schema(self, table_path):
+    def get_general_tmp_table_data(self, source_table_path):
         """
-        獲得指定Table的Schema
+        獲取tmp table 的 data
 
         Args:
-            table_path (str): Table的路徑
+            source_table_path (_type_): _description_
         """
         pass
         
