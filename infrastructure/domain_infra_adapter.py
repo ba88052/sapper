@@ -16,9 +16,7 @@ class DomainRespositoryAdapter(DomainInfraPort):
             api_log_entity_list (list): 參照api_log_entity
         """
         for api_log in api_log_entity_list:
-            ApiLogRepository().save(api_log=api_log)
-            
-        
+            ApiLogRepository().save(api_log=api_log)    
 
     def get_config(self):
         """
