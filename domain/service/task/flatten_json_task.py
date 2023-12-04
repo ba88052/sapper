@@ -1,8 +1,6 @@
 from domain.service.task.task import Task
 from domain.domain_infra_port import DomainInfraPort
 from domain.service.general_tmp_domain_service import GeneralTmpDataDomainService
-from datetime import datetime
-import json
 
 
 class FlattenJson(Task):

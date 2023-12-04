@@ -53,12 +53,13 @@ class ScoutApplicaionService:
                                                 previous_task_id = self.report_message.PREVIOUS_TASK_ID)
             print(general_tmp_data_entity.TMP_DATA)
 
+            # 加入一些存table時需要的欄位
             general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID,
             general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
             general_tmp_data_entity.TASK_NAME = self.request_message.TASK_NAME
             general_tmp_data_entity.TASK_ID = self.request_message.TASK_ID
 
-            self.application_infra_respository.save_destination_data_list(
+            self.application_infra_respository.save_general_tmp_data(
                                                             destination_table_path = self.request_message.DESTINATION_TABLE_PATH, 
                                                             general_tmp_data_entity = general_tmp_data_entity,
                                                             use_tmp_table = self.request_message.USE_GENERAL_TMP_TABLE)

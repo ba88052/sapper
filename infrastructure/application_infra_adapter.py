@@ -18,7 +18,7 @@ class ApplicationRespositoryAdapter(ApplicationInfraPort):
         """
         return ReportTaskCompletedRepository().publish_message(report_return_path=report_return_path, message=report_message)
         
-    def save_destination_data(self, destination_table_path, general_tmp_data_entity, use_tmp_table):
+    def save_general_tmp_data(self, destination_table_path, general_tmp_data_entity, use_tmp_table):
         """把實體化後的Entity資料，存入DB
 
         Args:
