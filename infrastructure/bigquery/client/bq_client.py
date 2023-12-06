@@ -31,6 +31,5 @@ class BqClient:
         # 因為bq的問題，這邊改to_arrow.topandas
         # 另外requirement.txt裡面改pandas==1.2.4
         results = query_job.result()
-        print(query_job.state)
         results_dict = [dict(row) for row in results]
         return results_dict

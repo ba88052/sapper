@@ -5,8 +5,8 @@
 REGION=asia-east1
 GCP_PROJECT_ID=cdcda-lab-377808
 REPO_NAME=sam-test
-IMAGE_NAME=scout
-CLOUD_RUN_SERVICE_NAMES=("scout") # 定義一個陣列
+IMAGE_NAME=sapper
+CLOUD_RUN_SERVICE_NAMES=("sapper") # 定義一個陣列
 FULL_IMAGE_NAME=$REGION-docker.pkg.dev/$GCP_PROJECT_ID/$REPO_NAME/$IMAGE_NAME
 SERVICE_ACCOUNT='sa-for-sam-liaw@cdcda-lab-377808.iam.gserviceaccount.com'
 

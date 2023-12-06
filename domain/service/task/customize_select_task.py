@@ -28,4 +28,6 @@ class CustomizeSelect(Task):
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
             TMP_DATA = result_data_list
         )
+        print ("list", result_data_list)
+        print("entity", general_tmp_data_entity.TMP_DATA)
         return general_tmp_data_entity

@@ -28,10 +28,6 @@ class SourceTableRepository(BqClient):
         # 添加條件
         if conditions:
             query += " WHERE " + " ".join(conditions)
-        print(query)
-        print("WTHHHHH")
         result_data =  self.run_query(query)
-        print("Really????")
-        print(result_data)
 
         return result_data
