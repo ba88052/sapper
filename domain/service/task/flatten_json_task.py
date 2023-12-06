@@ -8,7 +8,6 @@ class FlattenJson(Task):
         self.mission_id = mission_id
         self.mission_name = mission_name
         self.infra_respository = domain_infra_respository
-        self.config_file = self.infra_respository.get_config()["call_seon_fraud_api"]
 
     def execute(self, order_data, source_table_path, previous_task_id):
         """
