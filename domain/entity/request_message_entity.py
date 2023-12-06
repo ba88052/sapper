@@ -14,7 +14,7 @@ class RequestMessage:
         SOURCE_TABLE_PATH: str,
         DESTINATION_TABLE_PATH: str,
         TASK_STATUS: str,
-        USE_GENERAL_TEMP_TABLE: str,
+        USE_GENERAL_TMP_TABLE: str,
         BQ_CREATED_TIME: str,
         BQ_UPDATED_TIME: str
     ):
@@ -47,6 +47,6 @@ class RequestMessage:
         self.SOURCE_TABLE_PATH = SOURCE_TABLE_PATH
         self.DESTINATION_TABLE_PATH = DESTINATION_TABLE_PATH
         self.TASK_STATUS = TASK_STATUS
-        self.USE_GENERAL_TEMP_TABLE = USE_GENERAL_TEMP_TABLE
+        self.USE_GENERAL_TMP_TABLE = USE_GENERAL_TMP_TABLE
         self.BQ_CREATED_TIME = BQ_CREATED_TIME 
         self.BQ_UPDATED_TIME = BQ_UPDATED_TIME 

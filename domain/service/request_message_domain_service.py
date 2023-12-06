@@ -17,7 +17,7 @@ class RequestMessageDomainService:
         SOURCE_TABLE_PATH: str = "",
         DESTINATION_TABLE_PATH: str = "",
         TASK_STATUS: str = "",
-        USE_GENERAL_TEMP_TABLE: str = "",
+        USE_GENERAL_TMP_TABLE: str = "",
         BQ_CREATED_TIME: str = "",
         BQ_UPDATED_TIME: str = ""
     ):
@@ -54,7 +54,7 @@ class RequestMessageDomainService:
             SOURCE_TABLE_PATH = SOURCE_TABLE_PATH,
             DESTINATION_TABLE_PATH = DESTINATION_TABLE_PATH,
             TASK_STATUS = TASK_STATUS,
-            USE_GENERAL_TEMP_TABLE = USE_GENERAL_TEMP_TABLE,
+            USE_GENERAL_TMP_TABLE = USE_GENERAL_TMP_TABLE,
             BQ_CREATED_TIME = BQ_CREATED_TIME,
             BQ_UPDATED_TIME = BQ_UPDATED_TIME
         )
