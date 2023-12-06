@@ -54,7 +54,7 @@ class SapperApplicaionService:
             print(general_tmp_data_entity.TMP_DATA)
 
             # 加入一些存table時需要的欄位
-            general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID,
+            general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID
             general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
             general_tmp_data_entity.TASK_NAME = self.request_message.TASK_NAME
             general_tmp_data_entity.TASK_ID = self.request_message.TASK_ID
