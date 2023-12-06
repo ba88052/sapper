@@ -23,7 +23,8 @@ class DomainRespositoryAdapter(DomainInfraPort):
             source_table_path (_type_): _description_
             conditions (_type_): _description_
         """
-        SourceTableRepository(source_table_path = source_table_path).customize_select(conditions = conditions)
+        result_data = SourceTableRepository(source_table_path = source_table_path).customize_select(conditions = conditions)
+        return result_data
 
     def get_general_tmp_table_data(self, source_table_path, previous_task_id):
         """
@@ -32,5 +33,6 @@ class DomainRespositoryAdapter(DomainInfraPort):
         Args:
             source_table_path (_type_): _description_
         """
-        SourceTableRepository(source_table_path = source_table_path).customize_select(conditions = f"TASK_ID = {previous_task_id}")
+        result_data = SourceTableRepository(source_table_path = source_table_path).customize_select(conditions = f"TASK_ID = {previous_task_id}")
+        return result_data
         
