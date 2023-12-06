@@ -30,4 +30,7 @@ class SourceTableRepository(BqClient):
             query += " WHERE " + " ".join(conditions)
         print(query)
         result_data =  self.run_query(query)
-        return result_data
+        rows = [dict(row) for row in result_data]  # 將每行數據轉換為字典
+        json_data = json.dumps(rows)  # 將字典列表轉換為 JSON 字符串
+
+        return json_data
