@@ -14,7 +14,7 @@ class SapperApplicaionService:
             order_dict (dict): 內部要有parent_job_id, job_name
             db_respository (_type_): _description_
         """
-        self.request_message = RequestMessageDomainService.get_request_message(
+        self.request_message = RequestMessageDomainService().get_request_message(
             ORDER_DATA = message["order_data"],
             MISSION_NAME = message["mission_name"],
             MISSION_ID = message["mission_id"],
