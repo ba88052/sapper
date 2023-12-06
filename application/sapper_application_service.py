@@ -29,8 +29,8 @@ class SapperApplicaionService:
             USE_GENERAL_TMP_TABLE = message["use_general_tmp_table"],
         )
         self.report_message = message
-        self.request_message.TASK_STATUS = "Process"
-        self.request_message["note"] = ""
+        self.report_message["task_status"] = "Process"
+        self.report_message["note"] = ""
         self.application_infra_respository = application_infra_respository
         self.task_selector = TaskSelectorDomainService()
 
