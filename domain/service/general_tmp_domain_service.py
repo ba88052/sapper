@@ -12,7 +12,6 @@ class GeneralTmpDataDomainService:
         TASK_NAME: str = "",
         TASK_SEQUENCE: str = "",
         TMP_DATA: list = [],
-        USE_GENERAL_TEMP_TABLE: str = "",
         BQ_CREATED_TIME: str = "",
         BQ_UPDATED_TIME: str = ""
     ):
@@ -41,7 +40,6 @@ class GeneralTmpDataDomainService:
             TASK_NAME = TASK_NAME,
             TASK_SEQUENCE = TASK_SEQUENCE,
             TMP_DATA = TMP_DATA,
-            USE_GENERAL_TEMP_TABLE = USE_GENERAL_TEMP_TABLE,
             BQ_CREATED_TIME = BQ_CREATED_TIME,
             BQ_UPDATED_TIME = BQ_UPDATED_TIME
         )
