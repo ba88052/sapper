@@ -29,8 +29,9 @@ class SourceTableRepository(BqClient):
         if conditions:
             query += " WHERE " + " ".join(conditions)
         print(query)
+        print("WTHHHHH")
         result_data =  self.run_query(query)
-        rows = [dict(row) for row in result_data]  # 將每行數據轉換為字典
-        json_data = json.dumps(rows)  # 將字典列表轉換為 JSON 字符串
+        print("Really????")
+        print(result_data)
 
-        return json_data
+        return result_data
