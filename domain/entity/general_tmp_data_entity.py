@@ -9,6 +9,7 @@ class GeneralTmpData:
         TASK_NAME: str = "",
         TMP_DATA: list = [],
         TASK_SEQUENCE: str = "",
+        USE_GENERAL_TEMP_TABLE: str = "",
         BQ_CREATED_TIME: str = "",
         BQ_UPDATED_TIME: str = ""
     ):
@@ -31,3 +32,4 @@ class GeneralTmpData:
         self.TASK_SEQUENCE = TASK_SEQUENCE
         self.BQ_CREATED_TIME = BQ_CREATED_TIME 
         self.BQ_UPDATED_TIME = BQ_UPDATED_TIME 
+        self.USE_GENERAL_TEMP_TABLE = USE_GENERAL_TEMP_TABLE
