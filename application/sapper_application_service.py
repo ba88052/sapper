@@ -73,7 +73,7 @@ class SapperApplicaionService:
             self.report_message["note"] = error_info
 
         # 回報任務狀態
-        print(self.infra_respository.report_task_completed(report_return_path = self.report_path, 
+        print(self.application_infra_respository.report_task_completed(report_return_path = self.request_message.REPORT_PATH, 
                                                            report_message = self.report_message))
         
 
