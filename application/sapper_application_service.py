@@ -50,7 +50,7 @@ class SapperApplicaionService:
             # 將 order_data 丟入 task 中執行任務
             general_tmp_data_entity = task.execute(order_data = self.request_message.ORDER_DATA,
                                                 source_table_path = self.request_message.SOURCE_TABLE_PATH,
-                                                previous_task_id = self.report_message.PREVIOUS_TASK_ID)
+                                                previous_task_id = self.request_message.PREVIOUS_TASK_ID)
             print(general_tmp_data_entity.TMP_DATA)
 
             # 加入一些存table時需要的欄位
