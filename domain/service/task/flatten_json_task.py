@@ -18,7 +18,9 @@ class FlattenJson(Task):
                                                                            previous_task_id = previous_task_id)
         for tmp_table_data in tmp_table_data_list:
             tmp_data_list = tmp_table_data["TMP_DATA"]
+            print("tmp_data_list", tmp_data_list)
             for tmp_data in tmp_data_list:
+                print("tmp_data", tmp_data)
                 flatten_json_data = self.__flatten(data = tmp_data[order_data["columns"]])
                 flatten_json_data = self.__convert_all_to_str(flatten_json_data)
                 flatten_json_data_list.append(flatten_json_data)
