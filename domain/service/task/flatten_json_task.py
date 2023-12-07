@@ -18,6 +18,8 @@ class FlattenJson(Task):
         tmp_table_data_list = self.infra_respository.get_general_tmp_table_data(source_table_path = source_table_path, 
                                                                            previous_task_id = previous_task_id)
         for tmp_table_data in tmp_table_data_list:
+            print("FK", tmp_table_data)
+        for tmp_table_data in tmp_table_data_list:
             tmp_data_list = tmp_table_data["TMP_DATA"]
             try:
                 tmp_data_list_converted = json.loads(tmp_data_list)
