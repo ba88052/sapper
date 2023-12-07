@@ -89,19 +89,16 @@ class DestinationTableRepository(BqClient):
         """
         # 將 datetime 對象轉換為 RFC 3339 格式的字符串
         bq_created_time = datetime.now()
-        bq_created_time_str = str(bq_created_time.strftime(
+        bq_created_time_str = bq_created_time.strftime(
             "%Y-%m-%dT%H:%M:%S.%fZ"
-        ))
-        bq_updated_time_str = str(bq_created_time.strftime(
+        )
+        bq_updated_time_str = bq_created_time.strftime(
             "%Y-%m-%dT%H:%M:%S.%fZ"
-        ))
+        )
         general_tmp_data_entity.BQ_CREATED_TIME = bq_created_time_str
         general_tmp_data_entity.BQ_UPDATED_TIME = bq_updated_time_str
 
         # 把class轉dict
         bq_dict = vars(general_tmp_data_entity)
         print("DIC1", bq_dict)
-        bq_dict["BQ_CREATED_TIME"] = bq_created_time_str
-        bq_dict["BQ_UPDATED_TIME"] = bq_created_time_str
-        print("DIC2", bq_dict)
         return bq_dict
