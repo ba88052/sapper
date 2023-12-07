@@ -19,9 +19,12 @@ class FlattenJson(Task):
                                                                            previous_task_id = previous_task_id)
         for tmp_table_data in tmp_table_data_list:
             tmp_data_list = tmp_table_data["TMP_DATA"]
-            tmp_data_list = json.loads(tmp_data_list)
-            print("tmp_data_list", tmp_data_list)
-            print(type(tmp_data_list))
+            try:
+                tmp_data_list_converted = json.loads(tmp_data_list)
+                print("Converted tmp_data_list:", tmp_data_list_converted)
+                print("Type after conversion:", type(tmp_data_list_converted))
+            except json.JSONDecodeError as e:
+                print("JSONDecodeError:", e)
             for tmp_data in tmp_data_list:
                 # print("tmp_data", tmp_data)
                 # flatten_json_data = self.__flatten(data = tmp_data[order_data["columns"]])
