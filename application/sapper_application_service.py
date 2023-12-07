@@ -58,6 +58,7 @@ class SapperApplicaionService:
             general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
             general_tmp_data_entity.TASK_NAME = self.request_message.TASK_NAME
             general_tmp_data_entity.TASK_ID = self.request_message.TASK_ID
+            general_tmp_data_entity.TASK_SEQUENCE = self.request_message.TASK_SEQUENCE
 
             self.application_infra_respository.save_general_tmp_data(
                                                             destination_table_path = self.request_message.DESTINATION_TABLE_PATH, 

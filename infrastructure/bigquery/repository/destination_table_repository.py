@@ -1,7 +1,7 @@
 import json
 
 from infrastructure.bigquery.client.bq_client import BqClient
-from datetime import datetime
+from datetime import datetime, timezone
 from infrastructure.infra_config_handler import CONFIG
 
 
@@ -89,6 +89,8 @@ class DestinationTableRepository(BqClient):
         """
         # 將 datetime 對象轉換為 RFC 3339 格式的字符串
         bq_created_time = datetime.now()
+        bq_created_time_utc = bq_created_time.replace(tzinfo=timezone.utc)
+        bq_created_time_str = bq_created_time_utc.isoformat()
         bq_created_time_str = bq_created_time.strftime(
             "%Y-%m-%dT%H:%M:%S.%fZ"
         )
