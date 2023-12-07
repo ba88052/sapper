@@ -22,6 +22,7 @@ class DestinationTableRepository(BqClient):
         Args:
             raw_table (raw_table實體)
         """
+        print("use_tmp_table", use_tmp_table)
         if use_tmp_table == True:
             general_tmp_data_dict = self.__convert_to_tmp_table_format(general_tmp_data_entity)
             insertion_errors = self.client.insert_rows_json(
