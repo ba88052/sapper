@@ -20,10 +20,12 @@ class FlattenJson(Task):
             tmp_data_list = tmp_table_data["TMP_DATA"]
             for tmp_data in tmp_data_list:
                 flatten_json_data = self.__flatten(data = tmp_data[order_data["columns"]])
+                flatten_json_data = self.__convert_all_to_str(flatten_json_data)
                 flatten_json_data_list.append(flatten_json_data)
+
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
             TMP_DATA = flatten_json_data_list
-        )
+            )
         return general_tmp_data_entity
     
     def __flatten(self, data, parent_key='', sep='_'):
@@ -32,12 +34,12 @@ class FlattenJson(Task):
         這個函數會遞迴地遍歷巢狀字典，並生成一個新的字典，其中所有的Key都是通過連接父鍵和子鍵而得到的。
 
         args:
-        data (dict): 要扁平化的嵌套字典。
-        parent_key (str, 可選): 當前的父鍵。預設是空字符串。
-        sep (str, 可選): 用於連接父鍵和子鍵的分隔符。預設是下劃線 ('_')。
+            data (dict): 要扁平化的嵌套字典。
+            parent_key (str, 可選): 當前的父鍵。預設是空字符串。
+            sep (str, 可選): 用於連接父鍵和子鍵的分隔符。預設是下劃線 ('_')。
 
         return:
-        dict: 扁平化後的字典，其中每個key都是通過連接父鍵和子鍵而得到的，並且所有的值都不是字典。
+            dict: 扁平化後的字典，其中每個key都是通過連接父鍵和子鍵而得到的，並且所有的值都不是字典。
         """
         items = {}  # 初始化空字典，用於存儲扁平化後的結果。
         for k, v in data.items():  # 遍歷輸入字典中的所有項。
@@ -47,3 +49,20 @@ class FlattenJson(Task):
             else:
                 items[new_key] = v  # 如果不是，則直接將新的鍵和值添加到結果字典中。
         return items  # 返回填充了扁平化結果的字典。
+
+    def __convert_all_to_str(self, data): 
+        """
+        將資料使用以下程式碼，把欄位都轉成str
+
+        Args:
+            data (dict): dict
+
+        Returns:
+            data (dict): dict 轉換成裡面都 str
+        """
+        if isinstance(data, dict):
+            return {k: self.__convert_all_to_str(v) for k, v in data.items()}
+        elif isinstance(data, list):
+            return [self.__convert_all_to_str(v) for v in data]
+        else:
+            return str(data)
