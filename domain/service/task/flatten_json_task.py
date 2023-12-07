@@ -21,12 +21,13 @@ class FlattenJson(Task):
             tmp_data_list = tmp_table_data["TMP_DATA"]
             tmp_data_list = json.loads(tmp_data_list)
             print("tmp_data_list", tmp_data_list)
+            type(tmp_data_list)
             for tmp_data in tmp_data_list:
-                print("tmp_data", tmp_data)
+                # print("tmp_data", tmp_data)
                 # flatten_json_data = self.__flatten(data = tmp_data[order_data["columns"]])
                 # flatten_json_data = self.__convert_all_to_str(flatten_json_data)
                 # flatten_json_data_list.append(flatten_json_data)
-        raise
+                raise
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
             TMP_DATA = flatten_json_data_list
             )
