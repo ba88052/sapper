@@ -1,6 +1,7 @@
 from domain.service.task.task import Task
 from domain.domain_infra_port import DomainInfraPort
 from domain.service.general_tmp_domain_service import GeneralTmpDataDomainService
+import json
 
 
 class FlattenJson(Task):
@@ -21,6 +22,7 @@ class FlattenJson(Task):
             print("tmp_data_list", tmp_data_list)
             for tmp_data in tmp_data_list:
                 print("tmp_data", tmp_data)
+                tmp_data = json.loads(tmp_data)
                 flatten_json_data = self.__flatten(data = tmp_data[order_data["columns"]])
                 flatten_json_data = self.__convert_all_to_str(flatten_json_data)
                 flatten_json_data_list.append(flatten_json_data)
