@@ -106,5 +106,4 @@ class DestinationTableRepository(BqClient):
         # 把class轉dict
         bq_dict = vars(general_tmp_data_entity)
         print("DIC1", bq_dict)
-        bq_dict = json.dumps(str(bq_dict))
         return bq_dict

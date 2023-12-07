@@ -25,6 +25,7 @@ class CustomizeSelect(Task):
         conditions = order_data["select_conditions"]
         result_data_list =  self.infra_respository.customize_select_from_source_table(source_table_path = source_table_path, 
                                                                                  conditions = conditions)
+        result_data_list = json.dumps(str(result_data_list))
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
             TMP_DATA = result_data_list
         )
