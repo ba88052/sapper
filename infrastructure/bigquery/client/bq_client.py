@@ -24,7 +24,7 @@ class BqClient:
             query (str): SQL語法
 
         Returns:
-            df: query回傳的df
+            dict: query回傳的dict
         """
         # print("WTFFFFF")
         print(query)
