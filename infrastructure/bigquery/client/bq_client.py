@@ -26,7 +26,8 @@ class BqClient:
         Returns:
             df: query回傳的df
         """
-        print("WTFFFFF")
+        # print("WTFFFFF")
+        print(query)
         query_job = self.client.query(query)
         # 因為bq的問題，這邊改to_arrow.topandas
         # 另外requirement.txt裡面改pandas==1.2.4
