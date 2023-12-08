@@ -74,7 +74,7 @@ class DestinationTableRepository(BqClient):
         destination_data["BQ_CREATED_TIME"]: bq_created_time_str
         destination_data["BQ_UPDATED_TIME"]: bq_updated_time_str
         schema_field_names = self.__get_table_schema(table_id)
-        filled_data = []
+        filled_data = {}
         for field in schema_field_names:
             # 如果该字段在 destination_data 中存在，则使用其值，否则使用默认值 ""
             filled_data[field] = destination_data.get(field, "")
