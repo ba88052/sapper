@@ -18,20 +18,14 @@ class FlattenJson(Task):
         tmp_table_data_list = self.infra_respository.get_general_tmp_table_data(source_table_path = source_table_path, 
                                                                            previous_task_id = previous_task_id)
         for tmp_table_data in tmp_table_data_list:
-            print("FK", tmp_table_data)
-        for tmp_table_data in tmp_table_data_list:
+            print("tmp_table_data", tmp_table_data)
             tmp_data_list = tmp_table_data["TMP_DATA"]
-            try:
-                tmp_data_list_converted = json.loads(tmp_data_list)
-                print("Converted tmp_data_list:", tmp_data_list_converted)
-                print("Type after conversion:", type(tmp_data_list_converted))
-            except json.JSONDecodeError as e:
-                print("JSONDecodeError:", e)
-            for tmp_data in tmp_data_list:
-                # print("tmp_data", tmp_data)
-                # flatten_json_data = self.__flatten(data = tmp_data[order_data["columns"]])
-                # flatten_json_data = self.__convert_all_to_str(flatten_json_data)
-                # flatten_json_data_list.append(flatten_json_data)
+            tmp_data_list_converted = json.loads(tmp_data_list)
+            for tmp_data in tmp_data_list_converted:
+                print("tmp_data", tmp_data)
+                flatten_json_data = self.__flatten(data = tmp_data[order_data["columns"]])
+                flatten_json_data = self.__convert_all_to_str(flatten_json_data)
+                flatten_json_data_list.append(flatten_json_data)
                 raise
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
             TMP_DATA = flatten_json_data_list
