@@ -68,6 +68,7 @@ class FlattenJson(Task):
         if isinstance(data, dict):
             return {k: self.__convert_all_to_str(v) for k, v in data.items()}
         elif isinstance(data, list):
-            return [self.__convert_all_to_str(v) for v in data]
+            list_data = [self.__convert_all_to_str(v) for v in data]
+            return json.dumps(list_data)
         else:
             return str(data)
