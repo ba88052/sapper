@@ -38,6 +38,8 @@ class DestinationTableRepository(BqClient):
                 )
         else:
             for destination_data in general_tmp_data_entity.TMP_DATA:
+                print("destination_data", destination_data)
+                print("destination_data_type", type(destination_data))
                 destination_data_dict = self.__convert_to_destination_table_format(table_id=self.bigquery_table_id, destination_data = destination_data)
                 insertion_errors = self.client.insert_rows_json(
                     self.bigquery_table_id, [destination_data_dict]
