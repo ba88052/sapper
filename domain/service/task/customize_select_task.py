@@ -38,9 +38,9 @@ class CustomizeSelect(Task):
     
     def __convert_all_to_str(self, data): 
         if isinstance(data, dict):
-                return {k: self.convert_all_to_str(v) for k, v in data.items()}
+                return {k: self.__convert_all_to_str(v) for k, v in data.items()}
         elif isinstance(data, list):
-            return [self.convert_all_to_str(v) for v in data]
+            return [self.__convert_all_to_str(v) for v in data]
         else:
             return str(data)
 
