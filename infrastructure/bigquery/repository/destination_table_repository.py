@@ -60,6 +60,7 @@ class DestinationTableRepository(BqClient):
         # 獲取 BigQuery 表的 schema
         table = self.client.get_table(table_id)
         schema_field_names = {field.name for field in table.schema}
+        print("schema", schema_field_names)
         return schema_field_names
     
     def __convert_to_destination_table_format(self, table_id, destination_data):
@@ -73,6 +74,8 @@ class DestinationTableRepository(BqClient):
         )
         destination_data["BQ_CREATED_TIME"]: bq_created_time_str
         destination_data["BQ_UPDATED_TIME"]: bq_updated_time_str
+        print(destination_data)
+        print(bq_created_time_str)
         schema_field_names = self.__get_table_schema(table_id)
         filled_data = {}
         for field in schema_field_names:
