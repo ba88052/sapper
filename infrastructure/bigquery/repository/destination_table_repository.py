@@ -38,7 +38,7 @@ class DestinationTableRepository(BqClient):
                 )
         else:
             for destination_data in general_tmp_data_entity.TMP_DATA:
-                destination_data_dict = self.__convert_to_destination_table_format(destination_data)
+                destination_data_dict = self.__convert_to_destination_table_format(table_id=self.bigquery_table_id, destination_data = destination_data)
                 insertion_errors = self.client.insert_rows_json(
                     self.bigquery_table_id, [destination_data_dict]
                     )
@@ -60,7 +60,7 @@ class DestinationTableRepository(BqClient):
         schema_field_names = {field.name for field in table.schema}
         return schema_field_names
     
-    def __convert_to_destination_table_format(self, table_id, destination_data_dict):
+    def __convert_to_destination_table_format(self, table_id, destination_data):
         # 比對 JSON 資料與 schema，填充缺失的欄位
         bq_created_time = datetime.now()
         bq_created_time_str = bq_created_time.strftime(
@@ -69,11 +69,11 @@ class DestinationTableRepository(BqClient):
         bq_updated_time_str = bq_created_time.strftime(
             "%Y-%m-%dT%H:%M:%S.%fZ"
         )
-        destination_data_dict["BQ_CREATED_TIME"]: bq_created_time_str
-        destination_data_dict["BQ_UPDATED_TIME"]: bq_updated_time_str
+        destination_data["BQ_CREATED_TIME"]: bq_created_time_str
+        destination_data["BQ_UPDATED_TIME"]: bq_updated_time_str
         schema_field_names = self.__get_table_schema(table_id)
         filled_data = []
-        for record in destination_data_dict:
+        for record in destination_data:
             filled_record = {field: record.get(field, "") for field in schema_field_names}
             filled_data.append(filled_record)
         return filled_data
