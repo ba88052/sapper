@@ -75,9 +75,10 @@ class DestinationTableRepository(BqClient):
         destination_data["BQ_UPDATED_TIME"]: bq_updated_time_str
         schema_field_names = self.__get_table_schema(table_id)
         filled_data = []
-        for record in destination_data:
-            filled_record = {field: record.get(field, "") for field in schema_field_names}
-            filled_data.append(filled_record)
+        for field in schema_field_names:
+            # 如果该字段在 destination_data 中存在，则使用其值，否则使用默认值 ""
+            filled_data[field] = destination_data.get(field, "")
+        print(filled_data)
         return filled_data
 
     def __convert_to_tmp_table_format(self, general_tmp_data_entity):
