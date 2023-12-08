@@ -26,10 +26,22 @@ class CustomizeSelect(Task):
         target_columns = order_data["target_columns"]
         result_data_list =  self.infra_respository.customize_select_from_source_table(source_table_path = source_table_path, 
                                                                                  conditions = conditions, target_columns = target_columns)
-        result_data_list = json.dumps(str(result_data_list))
+        convert_data_list = []
+        for result_data in result_data_list:
+            convert_data_list.append(self.__convert_all_to_str(result_data))
+        convert_data_list_json = json.dumps(convert_data_list)
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
-            TMP_DATA = result_data_list
+            TMP_DATA = convert_data_list_json
         )
-        print ("list", result_data_list)
+        print ("list", convert_data_list_json)
         print("entity", general_tmp_data_entity.TMP_DATA)
         return general_tmp_data_entity
+    
+    def __convert_all_to_str(self, data): 
+        if isinstance(data, dict):
+                return {k: self.convert_all_to_str(v) for k, v in data.items()}
+        elif isinstance(data, list):
+            return [self.convert_all_to_str(v) for v in data]
+        else:
+            return str(data)
+
