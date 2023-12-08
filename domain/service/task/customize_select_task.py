@@ -24,7 +24,7 @@ class CustomizeSelect(Task):
         """
         conditions = order_data["select_conditions"]
         result_data_list =  self.infra_respository.customize_select_from_source_table(source_table_path = source_table_path, 
-                                                                                 conditions = conditions, target_columns = target_columns)
+                                                                                 conditions = conditions)
         convert_data_list = []
         for result_data in result_data_list:
             convert_data_list.append(self.__convert_all_to_str(result_data))
