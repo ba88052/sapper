@@ -6,7 +6,9 @@ import json
 
 
 class CustomizeSelect(Task):
-    def __init__(self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()):
+    def __init__(
+        self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()
+    ):
         self.mission_id = mission_id
         self.mission_name = mission_name
         self.infra_respository = domain_infra_respository
@@ -23,24 +25,24 @@ class CustomizeSelect(Task):
             list: 回傳資料
         """
         conditions = order_data["select_conditions"]
-        result_data_list =  self.infra_respository.customize_select_from_source_table(source_table_path = source_table_path, 
-                                                                                 conditions = conditions)
+        result_data_list = self.infra_respository.customize_select_from_source_table(
+            source_table_path=source_table_path, conditions=conditions
+        )
         convert_data_list = []
         for result_data in result_data_list:
             convert_data_list.append(self.__convert_all_to_str(result_data))
         convert_data_list_json = json.dumps(convert_data_list)
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
-            TMP_DATA = convert_data_list_json
+            TMP_DATA=convert_data_list_json
         )
-        print ("list", convert_data_list_json)
+        print("list", convert_data_list_json)
         print("entity", general_tmp_data_entity.TMP_DATA)
         return general_tmp_data_entity
-    
-    def __convert_all_to_str(self, data): 
+
+    def __convert_all_to_str(self, data):
         if isinstance(data, dict):
-                return {k: self.__convert_all_to_str(v) for k, v in data.items()}
+            return {k: self.__convert_all_to_str(v) for k, v in data.items()}
         elif isinstance(data, list):
             return [self.__convert_all_to_str(v) for v in data]
         else:
             return str(data)
-

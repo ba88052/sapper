@@ -23,11 +23,11 @@ class SourceTableRepository(BqClient):
             raw_table (raw_table實體)
         """
         # 基本查詢
-        query  = f"SELECT * FROM `{self.bigquery_table_id}`"
+        query = f"SELECT * FROM `{self.bigquery_table_id}`"
 
         # 添加條件
         if conditions:
             query += " WHERE " + " ".join(conditions)
-        result_data =  self.run_query(query)
+        result_data = self.run_query(query)
 
         return result_data

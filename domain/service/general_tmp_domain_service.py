@@ -13,7 +13,7 @@ class GeneralTmpDataDomainService:
         TASK_SEQUENCE: str = "",
         TMP_DATA: list = [],
         BQ_CREATED_TIME: str = "",
-        BQ_UPDATED_TIME: str = ""
+        BQ_UPDATED_TIME: str = "",
     ):
         """
         輸入參數，回傳 RequestMessage 的entity
@@ -34,12 +34,12 @@ class GeneralTmpDataDomainService:
             request_message實體
         """
         return GeneralTmpData(
-            UUID_Request = UUID_Request,
-            MISSION_NAME = MISSION_NAME,
-            TASK_ID = TASK_ID,
-            TASK_NAME = TASK_NAME,
-            TASK_SEQUENCE = TASK_SEQUENCE,
-            TMP_DATA = TMP_DATA,
-            BQ_CREATED_TIME = BQ_CREATED_TIME,
-            BQ_UPDATED_TIME = BQ_UPDATED_TIME
+            UUID_Request=UUID_Request,
+            MISSION_NAME=MISSION_NAME,
+            TASK_ID=TASK_ID,
+            TASK_NAME=TASK_NAME,
+            TASK_SEQUENCE=TASK_SEQUENCE,
+            TMP_DATA=TMP_DATA,
+            BQ_CREATED_TIME=BQ_CREATED_TIME,
+            BQ_UPDATED_TIME=BQ_UPDATED_TIME,
         )

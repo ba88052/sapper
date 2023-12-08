@@ -2,13 +2,13 @@ import pytest
 from unittest.mock import patch, MagicMock
 from domain.service.api_requests_doamin_service import ApiRequestsDomainService
 
-class TestApiRequestsDomainService:
 
+class TestApiRequestsDomainService:
     def test_fetch_page_list(self):
         # 实例化 ApiRequestsDomainService
         service = ApiRequestsDomainService()
         request_tuples = [
-            ('http://example.com', {'headers': {'User-Agent': 'MyApp'}}),
+            ("http://example.com", {"headers": {"User-Agent": "MyApp"}}),
         ]
 
         # 测试 GET 方法
@@ -22,9 +22,6 @@ class TestApiRequestsDomainService:
         for response_dict in response_dict_list:
             response = response_dict["response"]
             assert response.status_code == 200
-
-
-
 
     # @patch('httpx.AsyncClient.get')
     # @patch('httpx.AsyncClient.post')

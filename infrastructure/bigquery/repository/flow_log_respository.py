@@ -23,7 +23,7 @@
 #             api_log (api_log實體)
 #         """
 #         api_log_dict = self.__convert_api_log_entity_to_bq_format(api_log)
-        
+
 #         print(api_log_dict)
 
 #         insertion_errors = self.client.insert_rows_json(

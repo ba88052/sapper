@@ -3,10 +3,8 @@ import os
 from flask import Flask, g, request
 from domain.service.amadeus import start
 
-from infrastructure.application_infra_adapter import \
-    ApplicationRespositoryAdapter
-from infrastructure.domain_infra_adapter import \
-    DomainRespositoryAdapter
+from infrastructure.application_infra_adapter import ApplicationRespositoryAdapter
+from infrastructure.domain_infra_adapter import DomainRespositoryAdapter
 from interfaces import api_routes
 
 # from infrastructure.database.domain_database_repository_adapter import DomainRespositoryAdapter

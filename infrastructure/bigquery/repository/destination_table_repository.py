@@ -24,37 +24,35 @@ class DestinationTableRepository(BqClient):
         """
         print("use_tmp_table", use_tmp_table)
         if use_tmp_table == True:
-            general_tmp_data_dict = self.__convert_to_tmp_table_format(general_tmp_data_entity)
+            general_tmp_data_dict = self.__convert_to_tmp_table_format(
+                general_tmp_data_entity
+            )
             insertion_errors = self.client.insert_rows_json(
                 self.bigquery_table_id, [general_tmp_data_dict]
-                )
+            )
             if insertion_errors:
                 print(
                     f"Errors occurred while storing destination_data_dict to BigQuery: {insertion_errors}"
                 )
             else:
-                print(
-                    "destination_data_dict stored successfully to BigQuery."
-                )
+                print("destination_data_dict stored successfully to BigQuery.")
         else:
             for destination_data in general_tmp_data_entity.TMP_DATA:
                 print("destination_data", destination_data)
                 print("destination_data_type", type(destination_data))
-                destination_data_dict = self.__convert_to_destination_table_format(table_id=self.bigquery_table_id, destination_data = destination_data)
+                destination_data_dict = self.__convert_to_destination_table_format(
+                    table_id=self.bigquery_table_id, destination_data=destination_data
+                )
                 insertion_errors = self.client.insert_rows_json(
                     self.bigquery_table_id, [destination_data_dict]
-                    )
+                )
 
                 if insertion_errors:
                     print(
                         f"Errors occurred while storing destination_data_dict to BigQuery: {insertion_errors}"
                     )
                 else:
-                    print(
-                        "destination_data_dict stored successfully to BigQuery."
-                    )
-
-  
+                    print("destination_data_dict stored successfully to BigQuery.")
 
     def __get_table_schema(self, table_id):
         # 獲取 BigQuery 表的 schema
@@ -62,16 +60,12 @@ class DestinationTableRepository(BqClient):
         schema_field_names = {field.name for field in table.schema}
         print("schema", schema_field_names)
         return schema_field_names
-    
+
     def __convert_to_destination_table_format(self, table_id, destination_data):
         # 比對 JSON 資料與 schema，填充缺失的欄位
         bq_created_time = datetime.now()
-        bq_created_time_str = bq_created_time.strftime(
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
-        bq_updated_time_str = bq_created_time.strftime(
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         destination_data["BQ_CREATED_TIME"] = bq_created_time_str
         destination_data["BQ_UPDATED_TIME"] = bq_updated_time_str
         print(destination_data)
@@ -98,12 +92,8 @@ class DestinationTableRepository(BqClient):
         bq_created_time = datetime.now()
         bq_created_time_utc = bq_created_time.replace(tzinfo=timezone.utc)
         bq_created_time_str = bq_created_time_utc.isoformat()
-        bq_created_time_str = bq_created_time.strftime(
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
-        bq_updated_time_str = bq_created_time.strftime(
-            "%Y-%m-%dT%H:%M:%S.%fZ"
-        )
+        bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         # bq_created_time_str = ''
         # bq_updated_time_str = ''
         general_tmp_data_entity.BQ_CREATED_TIME = bq_created_time_str

@@ -4,7 +4,7 @@ class DomainInfraPort:
         讀取參數檔
         """
         raise NotImplementedError
-    
+
     def customize_select_from_source_table(self, source_table_path, conditions):
         """
         客製化查詢source_table
@@ -23,4 +23,3 @@ class DomainInfraPort:
             source_table_path (_type_): _description_
         """
         pass
-        

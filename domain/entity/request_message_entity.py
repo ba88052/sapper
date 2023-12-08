@@ -1,12 +1,13 @@
 from datetime import datetime
 
+
 class RequestMessage:
     def __init__(
         self,
         ORDER_DATA: dict,
         MISSION_NAME: str,
         MISSION_ID: str,
-        PREVIOUS_TASK_ID :str,
+        PREVIOUS_TASK_ID: str,
         TASK_ID: str,
         TASK_NAME: str,
         TASK_SEQUENCE: str,
@@ -16,7 +17,7 @@ class RequestMessage:
         TASK_STATUS: str,
         USE_GENERAL_TMP_TABLE: str,
         BQ_CREATED_TIME: str,
-        BQ_UPDATED_TIME: str
+        BQ_UPDATED_TIME: str,
     ):
         """
         初始化 RequestMessage 物件，設定各項任務相關參數。
@@ -48,5 +49,5 @@ class RequestMessage:
         self.DESTINATION_TABLE_PATH = DESTINATION_TABLE_PATH
         self.TASK_STATUS = TASK_STATUS
         self.USE_GENERAL_TMP_TABLE = USE_GENERAL_TMP_TABLE
-        self.BQ_CREATED_TIME = BQ_CREATED_TIME 
-        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME 
+        self.BQ_CREATED_TIME = BQ_CREATED_TIME
+        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME

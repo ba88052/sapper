@@ -1,6 +1,7 @@
 from infrastructure.cloud_storage.client.gcs_client import GcsClient
 import json
 
+
 class JsonRepository(GcsClient):
     def __init__(self):
         super().__init__()
@@ -13,7 +14,7 @@ class JsonRepository(GcsClient):
             data (dict or str): 要上傳的資料，可以是字典或字符串格式
             destination_blob_name (str): blob 名稱
         """
-        
+
         data = raw_table.RawData
         self.bucket = self.client.get_bucket(raw_table_bucket_name)
         blob = self.bucket.blob(raw_table_blob_name)
@@ -31,7 +32,7 @@ class JsonRepository(GcsClient):
 
     def download_json(self, blob_name):
         """
-        从 GCS bucket 下載 JSON 
+        从 GCS bucket 下載 JSON
 
         Args:
             blob_name (str): blob 名稱

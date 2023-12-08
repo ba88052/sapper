@@ -9,7 +9,7 @@ class RequestMessageDomainService:
         ORDER_DATA: dict = {},
         MISSION_NAME: str = "",
         MISSION_ID: str = "",
-        PREVIOUS_TASK_ID: str="",
+        PREVIOUS_TASK_ID: str = "",
         TASK_ID: str = "",
         TASK_NAME: str = "",
         TASK_SEQUENCE: str = "",
@@ -19,7 +19,7 @@ class RequestMessageDomainService:
         TASK_STATUS: str = "",
         USE_GENERAL_TMP_TABLE: str = "",
         BQ_CREATED_TIME: str = "",
-        BQ_UPDATED_TIME: str = ""
+        BQ_UPDATED_TIME: str = "",
     ):
         """
         輸入參數，回傳 RequestMessage 的entity
@@ -43,18 +43,18 @@ class RequestMessageDomainService:
             request_message實體
         """
         return RequestMessage(
-            ORDER_DATA = ORDER_DATA,
-            MISSION_NAME = MISSION_NAME,
-            MISSION_ID = MISSION_ID,
-            TASK_ID = TASK_ID,
-            PREVIOUS_TASK_ID = PREVIOUS_TASK_ID,
-            TASK_NAME = TASK_NAME,
-            TASK_SEQUENCE = TASK_SEQUENCE,
-            REPORT_PATH = REPORT_PATH,
-            SOURCE_TABLE_PATH = SOURCE_TABLE_PATH,
-            DESTINATION_TABLE_PATH = DESTINATION_TABLE_PATH,
-            TASK_STATUS = TASK_STATUS,
-            USE_GENERAL_TMP_TABLE = USE_GENERAL_TMP_TABLE,
-            BQ_CREATED_TIME = BQ_CREATED_TIME,
-            BQ_UPDATED_TIME = BQ_UPDATED_TIME
+            ORDER_DATA=ORDER_DATA,
+            MISSION_NAME=MISSION_NAME,
+            MISSION_ID=MISSION_ID,
+            TASK_ID=TASK_ID,
+            PREVIOUS_TASK_ID=PREVIOUS_TASK_ID,
+            TASK_NAME=TASK_NAME,
+            TASK_SEQUENCE=TASK_SEQUENCE,
+            REPORT_PATH=REPORT_PATH,
+            SOURCE_TABLE_PATH=SOURCE_TABLE_PATH,
+            DESTINATION_TABLE_PATH=DESTINATION_TABLE_PATH,
+            TASK_STATUS=TASK_STATUS,
+            USE_GENERAL_TMP_TABLE=USE_GENERAL_TMP_TABLE,
+            BQ_CREATED_TIME=BQ_CREATED_TIME,
+            BQ_UPDATED_TIME=BQ_UPDATED_TIME,
         )
