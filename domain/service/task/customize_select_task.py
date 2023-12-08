@@ -23,7 +23,6 @@ class CustomizeSelect(Task):
             list: 回傳資料
         """
         conditions = order_data["select_conditions"]
-        target_columns = order_data["target_columns"]
         result_data_list =  self.infra_respository.customize_select_from_source_table(source_table_path = source_table_path, 
                                                                                  conditions = conditions, target_columns = target_columns)
         convert_data_list = []
