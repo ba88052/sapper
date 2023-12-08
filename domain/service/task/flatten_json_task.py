@@ -28,7 +28,6 @@ class FlattenJson(Task):
                 flatten_json_data = self.__flatten(data = data)
                 flatten_json_data = self.__convert_all_to_str(flatten_json_data)
                 flatten_json_data_list.append(flatten_json_data)
-                raise
         general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
             TMP_DATA = flatten_json_data_list
             )
