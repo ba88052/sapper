@@ -15,7 +15,7 @@ class DomainRespositoryAdapter(DomainInfraPort):
         """
         return CONFIG
     
-    def customize_select_from_source_table(self, source_table_path, conditions):
+    def customize_select_from_source_table(self, source_table_path, conditions, target_columns):
         """
         客製化查詢source_table
 
@@ -23,7 +23,7 @@ class DomainRespositoryAdapter(DomainInfraPort):
             source_table_path (_type_): _description_
             conditions (_type_): _description_
         """
-        result_data = SourceTableRepository(source_table_path = source_table_path).customize_select(conditions = conditions)
+        result_data = SourceTableRepository(source_table_path = source_table_path).customize_select(conditions = conditions, target_columns = target_columns)
         return result_data
 
     def get_general_tmp_table_data(self, source_table_path, previous_task_id):
