@@ -6,7 +6,7 @@ from domain.entity.general_tmp_data_entity import GeneralTmpData
 class GeneralTmpDataDomainService:
     def get_gemeral_tmp_data(
         self,
-        UUID_Request: dict = {},
+        UUID_Request: str = "",
         MISSION_NAME: str = "",
         TASK_ID: str = "",
         TASK_NAME: str = "",

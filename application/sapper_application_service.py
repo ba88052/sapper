@@ -21,7 +21,7 @@ class SapperApplicaionService:
             TASK_ID=message["task_id"],
             TASK_NAME=message["task_name"],
             TASK_SEQUENCE=message["task_sequence"],
-            REPORT_PATH=message["report_path"],
+            REPORT_PATH=message["task_report_path"],
             SOURCE_TABLE_PATH=message["source_table_path"],
             DESTINATION_TABLE_PATH=message["destination_table_path"],
             TASK_STATUS=message["task_status"],
