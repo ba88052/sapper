@@ -11,8 +11,8 @@ class ApplicationInfraPort:
         """
         pass
 
-    def report_task_completed(self, report_return_path, report_message):
-        """做完動作後，將完成task的訊息傳出
+    def report_job_completed(self, report_return_path, report_message):
+        """做完動作後，將完成job的訊息傳出
 
         Args:
             report_return_path (str): 回傳的管道

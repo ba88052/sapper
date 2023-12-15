@@ -1,11 +1,11 @@
-from domain.service.task.task import Task
+from domain.service.job.job import Job
 from domain.domain_infra_port import DomainInfraPort
 from domain.service.general_tmp_domain_service import GeneralTmpDataDomainService
 from datetime import datetime
 import json
 
 
-class CustomizeSelect(Task):
+class CustomizeSelect(Job):
     def __init__(
         self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()
     ):
@@ -13,7 +13,7 @@ class CustomizeSelect(Task):
         self.mission_name = mission_name
         self.infra_respository = domain_infra_respository
 
-    def execute(self, order_data, source_table_path, previous_task_id):
+    def execute(self, order_data, source_table_path, previous_job_id):
         """
         客製化查詢
 

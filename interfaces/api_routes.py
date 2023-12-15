@@ -26,7 +26,7 @@ def get_pubsub_message():
     return None
 
 
-@routes.route("/sapper/execute_table_transform_task", methods=["POST"])
+@routes.route("/sapper/execute_table_transform_job", methods=["POST"])
 def execute_collect_mission():
     """
     專門用來接收pub/sub的訊息，觸發將傳入範圍切小後打出去的接口
@@ -35,7 +35,7 @@ def execute_collect_mission():
     print("AAAA")
     SapperApplicaionService(
         message=order_dict, application_infra_respository=g.APPLICATION_INFRA_ADAPTOR
-    ).execute_task()
+    ).execute_job()
     print("PPPPP")
     return make_response((f"success", 204))
 

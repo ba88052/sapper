@@ -1,10 +1,10 @@
-from domain.service.task.task import Task
+from domain.service.job.job import Job
 from domain.domain_infra_port import DomainInfraPort
 from domain.service.general_tmp_domain_service import GeneralTmpDataDomainService
 import json
 
 
-class FlattenJson(Task):
+class FlattenJson(Job):
     def __init__(
         self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()
     ):
@@ -12,13 +12,13 @@ class FlattenJson(Task):
         self.mission_name = mission_name
         self.infra_respository = domain_infra_respository
 
-    def execute(self, order_data, source_table_path, previous_task_id):
+    def execute(self, order_data, source_table_path, previous_job_id):
         """
         將巢狀Json轉換為扁平字典。
         """
         flatten_json_data_list = []
         tmp_table_data_list = self.infra_respository.get_general_tmp_table_data(
-            source_table_path=source_table_path, previous_task_id=previous_task_id
+            source_table_path=source_table_path, previous_job_id=previous_job_id
         )
         for tmp_table_data in tmp_table_data_list:
             print("tmp_table_data", tmp_table_data)

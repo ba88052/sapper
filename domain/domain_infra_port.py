@@ -15,7 +15,7 @@ class DomainInfraPort:
         """
         pass
 
-    def get_general_tmp_table_data(self, source_table_path, previous_task_id):
+    def get_general_tmp_table_data(self, source_table_path, previous_job_id):
         """
         獲取tmp table 的 data
 

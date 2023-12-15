@@ -3,7 +3,7 @@ import json
 from infrastructure.pubsub.client.pubsub_client import PubSubClient
 
 
-class ReportTaskCompletedRepository(PubSubClient):
+class ReportJobCompletedRepository(PubSubClient):
     def publish_message(self, report_return_path, message, attributes={}):
         """
         負責把訊息打到 report_return_path

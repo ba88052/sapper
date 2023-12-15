@@ -4,7 +4,7 @@
         "log":{
             "dataset_name": "SAM_LAB",
             "api_log_table_name": "API_LOG_test_1122",
-            "flow_log_table_name": "spider_platform_raw_data_0829"
+            "flow_log_table_name": ""
         }
     },
     "pubsub": {

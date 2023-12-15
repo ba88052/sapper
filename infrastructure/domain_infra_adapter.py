@@ -29,7 +29,7 @@ class DomainRespositoryAdapter(DomainInfraPort):
         ).customize_select(conditions=conditions)
         return result_data
 
-    def get_general_tmp_table_data(self, source_table_path, previous_task_id):
+    def get_general_tmp_table_data(self, source_table_path, previous_job_id):
         """
         獲取 tmp_table 的 data
 
@@ -38,5 +38,5 @@ class DomainRespositoryAdapter(DomainInfraPort):
         """
         result_data = SourceTableRepository(
             source_table_path=source_table_path
-        ).customize_select(conditions=[f"TASK_ID = '{previous_task_id}'"])
+        ).customize_select(conditions=[f"JOB_ID = '{previous_job_id}'"])
         return result_data

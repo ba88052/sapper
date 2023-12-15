@@ -2,8 +2,8 @@ from application.application_infra_port import ApplicationInfraPort
 from infrastructure.bigquery.repository.destination_table_repository import (
     DestinationTableRepository,
 )
-from infrastructure.pubsub.repository.report_task_completed_repository import (
-    ReportTaskCompletedRepository,
+from infrastructure.pubsub.repository.report_job_completed_repository import (
+    ReportJobCompletedRepository,
 )
 
 
@@ -11,14 +11,14 @@ class ApplicationRespositoryAdapter(ApplicationInfraPort):
     def __init__(self):
         pass
 
-    def report_task_completed(self, report_return_path, report_message):
-        """做完動作後，將完成task的訊息傳出
+    def report_job_completed(self, report_return_path, report_message):
+        """做完動作後，將完成job的訊息傳出
 
         Args:
             report_return_path (str): 回傳的管道
             report_message (str): 回報的message
         """
-        return ReportTaskCompletedRepository().publish_message(
+        return ReportJobCompletedRepository().publish_message(
             report_return_path=report_return_path, message=report_message
         )
 

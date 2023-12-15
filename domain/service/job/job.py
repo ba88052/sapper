@@ -1,4 +1,4 @@
-class Task:
+class Job:
     def execute():
         """
         用來規範子任務class都要有def execute，不然會報錯
