@@ -24,8 +24,10 @@ class CustomizeSelect(Task):
         Returns:
             list: 回傳資料
         """
-        conditions = order_data["select_conditions"].format(**locals())
-        print(conditions)
+        conditions = []
+        conditions_list = order_data["select_conditions"]
+        for condition in conditions_list:
+            conditions.append(condition.format(**locals()))
         result_data_list = self.infra_respository.customize_select_from_source_table(
             source_table_path=source_table_path, conditions=conditions
         )
