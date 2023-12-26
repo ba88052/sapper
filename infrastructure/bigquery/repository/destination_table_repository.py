@@ -17,10 +17,11 @@ class DestinationTableRepository(BqClient):
 
     def save(self, general_tmp_data_entity, use_tmp_table):
         """
-        把 raw_table 存到bq
+        把 general_tmp_data_entity 存到bq
 
         Args:
-            raw_table (raw_table實體)
+            general_tmp_data_entity (general_tmp_data_entity實體)
+            use_tmp_table(Booling):是否使用暫存表，使用表示還有下一個動作
         """
         print("use_tmp_table", use_tmp_table)
         if use_tmp_table == True:
@@ -55,14 +56,33 @@ class DestinationTableRepository(BqClient):
                     print("destination_data_dict stored successfully to BigQuery.")
 
     def __get_table_schema(self, table_id):
+        """
         # 獲取 BigQuery 表的 schema
+
+        Args:
+            table_id (str): 目標表的ID，或者說路徑
+
+        Returns:
+            dict: 目標表的schema dict
+        """
+        
         table = self.client.get_table(table_id)
         schema_field_names = {field.name for field in table.schema}
         print("schema", schema_field_names)
         return schema_field_names
 
     def __convert_to_destination_table_format(self, table_id, destination_data):
+        """
         # 比對 JSON 資料與 schema，填充缺失的欄位
+
+        Args:
+            table_id (str): 目標表的ID，或者說路徑
+            destination_data (dict): 要儲存的data
+
+        Returns:
+            dict: 整理後的資料
+        """
+        
         bq_created_time = datetime.now()
         bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -73,7 +93,7 @@ class DestinationTableRepository(BqClient):
         schema_field_names = self.__get_table_schema(table_id)
         filled_data = {}
         for field in schema_field_names:
-            # 如果该字段在 destination_data 中存在，则使用其值，否则使用默认值 ""
+            # 如果該欄位在 destination_data 中存在，則使用其值，否則使用預設值 ""
             filled_data[field] = destination_data.get(field, "")
         print(filled_data)
         return filled_data
@@ -94,12 +114,8 @@ class DestinationTableRepository(BqClient):
         bq_created_time_str = bq_created_time_utc.isoformat()
         bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        # bq_created_time_str = ''
-        # bq_updated_time_str = ''
         general_tmp_data_entity.BQ_CREATED_TIME = bq_created_time_str
         general_tmp_data_entity.BQ_UPDATED_TIME = bq_updated_time_str
-        print("WTF")
         # 把class轉dict
         bq_dict = vars(general_tmp_data_entity)
-        print("DIC1", bq_dict)
         return bq_dict

@@ -1,68 +1,86 @@
-# DDD四層架構資料清洗程式 - raw_data_cleaner
+# Sapper 微服務
 
-raw_data_cleaner 是一個專門設計在 Google Cloud Platform（GCP）上運行的資料清理程式。它整合了 GCP 的Pub/Sub 和 Cloud Run，以實現數據的高效清理。
-主要部署於 Cloud Run 並由 Pub/Sub 觸發
+## 服務概述
 
-## 程式架構
-該程式遵循 Domain-Driven Design (DDD) 的四層架構，包括以下層：
+Sapper 微服務專門用於資料的清理與整理，實現從一個數據表到另一個數據表的數據轉換。此服務利用 Google Cloud Platform 的功能，特別是 BigQuery 和 Pub/Sub，以實現高效的數據處理。
 
-### Infrastructure
-負責提供資料存取功能，例如與 Google Cloud 的 BigQuery 或其他存儲解決方案的連線。
+## 系統架構
 
-### Domain
-包含了業務邏輯以及應用程式的主要實體 (Entities)，例如各種cleaner的清理流程和控制邏輯。
+Sapper 微服務採用 DDD 四層架構：
 
-### Application
-負責調度 Domain 層和 Infrastructure 以處理特定的業務流程，並為 Interface 層提供所需的資料。
+1. **應用層（Application）**：處理接收到的任務訊息並控制數據處理流程。
+2. **領域層（Domain）**：包含數據轉換的業務邏輯和數據模型。
+3. **基礎設施層（Infrastructure）**：提供與 GCP 服務的整合，如數據庫和消息隊列。
+4. **接口層（Interfaces）**：處理來自外部的請求並定義 API 端點。
 
-### Interfaces
-提供與外部系統的交互功能，例如 RESTful API 或 Pub/Sub 消息處理。在此專案中，主要透過 Pub/Sub 觸發爬蟲運行。
+## 主要entity
 
-## START
+## 安裝指南
+### START
 1. clone此專案到所需專案的workbench中：
 
-\```bash
-git clone <repository_url>
-\```
+    ```bash
+    git clone <repository_url>
+    ```
 
 2. 調整 `infra_config.json` 配置文件和 `deploy_to_cloudrun.sh` 中的專案名稱、BQ位置。
 
 3. 部署至 Cloud Run：
 
-\```bash
-bash deploy_to_cloudrun.sh
-\```
+    ```bash
+    bash deploy_to_cloudrun.sh
+    ```
 
-4. 在 GCP 建立對應的table，且需符合該資料清理對應之Entity文件
+4. 在 GCP 建立對應的table，且需符合該資料清理對應之Entity文件。
 
-5. 設定訂閱項目皆為部屬之 cloud run，接著用pub/sub打入以下資料到cloud run中，以觸發爬蟲。
+5. 設定訂閱項目皆為部屬之 cloud run，接著用pub/sub打入資料到cloud run中，以觸發程式。
+
+
+## API 使用說明
+
+Sapper 微服務提供以下 API 接口：
+- `POST /sapper/execute_table_transform_job`: 接收來自 Pub/Sub 的訊息，執行資料轉換任務。
+
+測試用訊息：
+做客製化select
 {
-"job_name": "CLEAN_JOB_NAME",
- "parent_job_id": "ID"
+  "order_data": {
+    "select_conditions": ["TASK_ID = '{previous_task_id}'"]
+  },
+  "mission_name": "seon_test",
+  "mission_id": "mission_test_1206",
+  "task_name": "customize_select",
+  "task_id": "cus_select_test",
+  "previous_task_id": "755ab57c-b55f-45cf-8a32-073001e0c463",
+  "task_sequence": 2,
+  "task_report_path": "repot_liaison",
+  "source_table_path": "SAM_LAB.MISSION_NAME_RAW_TABLE_test_1129",
+  "destination_table_path": "SAM_LAB.SAPPER_GENERAL_TMP_TABLE_test_1206",
+  "task_status": "start",
+  "use_general_tmp_table": true
 }
 
-
-## API 使用方式
-
-此資料清洗程式提供了以下 API 端點，以允許外部系統，主要為pub/sub觸發爬蟲作業。
-
-### 1. Automated Spider Updater (`/raw_data_cleaner`)
-- **備註**
-- **方法**: POST
-- **描述**: 觸發自動資料清理。
-- **請求參數**: JSON 物件，包含 `job_name` 字段和 `parent_job_id`字段。
-- **回應**: 成功訊息及 204 狀態碼。
-- **範例**:    
-\```json
-    {
-      "job_name": "ssc_company_listing_info_spider",
-      "parent_job_id": "5e858ef5-f5b2-47ec-b13b-2ce8f9cffff5"
-    }
- \```
-
-
+做json攤平
+{
+  "order_data": {
+    "columns": "RAW_DATA"
+  },
+  "mission_name": "seon_test",
+  "mission_id": "mission_test_1206",
+  "task_name": "flatten_json",
+  "task_id": "flat_json_test",
+  "previous_task_id":"cus_select_test",
+  "task_sequence": 3,
+  "report_path": "repot_liaison",
+  "source_table_path": "SAM_LAB.SAPPER_GENERAL_TMP_TABLE_test_1206",
+  "destination_table_path" : "SAM_LAB.SEON_TEST_1208",
+  "task_status": "start",
+ "use_general_tmp_table": false
+}
 
 ## 注意事項
-- 由於此資料清洗程式完全在 GCP 上運行，因此不支援本地運行或測試。
-- 請確保所有的 GCP 服務和資源都已正確配置，並修改 `infra_config.json`，和新增對應資料的清理方式於 raw_data_cleaner ，並包含對應的Entity。
-- 若要新增清理程式，步驟可以如下：1. 增加entity. 2. 在BQ中建立表，並把表寫在infra_config裏面 3. 撰寫清理邏輯
+- 確保所有必要的 GCP 服務已被正確配置。
+- 在生產環境中部署前進行充分測試。
+
+## 版本歷史
+- v1.0.0：初始版本。

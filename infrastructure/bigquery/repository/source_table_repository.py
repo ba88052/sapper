@@ -7,17 +7,16 @@ from infrastructure.infra_config_handler import CONFIG
 
 class SourceTableRepository(BqClient):
     """
-    負責涉及 clean_job 表格的操作
+    負責涉及 source table 表格的操作
     """
 
     def __init__(self, source_table_path):
         super().__init__()
-        # self.bigquery_table_id = f"{self.project}.{self.dataset}.{self.table}"
         self.bigquery_table_id = source_table_path
 
     def customize_select(self, conditions=None):
         """
-        把 raw_table 存到bq
+        從 source table 中使用sql客製化select資料
 
         Args:
             raw_table (raw_table實體)
