@@ -1,6 +1,6 @@
 from domain.service.job.job import Job
 from domain.domain_infra_port import DomainInfraPort
-from domain.service.general_tmp_domain_service import GeneralTmpDataDomainService
+from domain.entity.general_tmp_data_entity import GeneralTmpData
 from datetime import datetime
 import json
 
@@ -35,7 +35,7 @@ class CustomizeSelect(Job):
         for result_data in result_data_list:
             convert_data_list.append(self.__convert_all_to_str(result_data))
         convert_data_list_json = json.dumps(convert_data_list)
-        general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
+        general_tmp_data_entity = GeneralTmpData(
             TMP_DATA=convert_data_list_json
         )
         print("list", convert_data_list_json)

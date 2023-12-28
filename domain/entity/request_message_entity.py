@@ -4,20 +4,20 @@ from datetime import datetime
 class RequestMessage:
     def __init__(
         self,
-        ORDER_DATA: dict,
-        MISSION_NAME: str,
-        MISSION_ID: str,
-        PREVIOUS_JOB_ID: str,
-        JOB_ID: str,
-        JOB_NAME: str,
-        JOB_SEQUENCE: str,
-        REPORT_PATH: str,
-        SOURCE_TABLE_PATH: str,
-        DESTINATION_TABLE_PATH: str,
-        JOB_STATUS: str,
-        USE_GENERAL_TMP_TABLE: str,
-        BQ_CREATED_TIME: str,
-        BQ_UPDATED_TIME: str,
+        ORDER_DATA: dict = {},
+        MISSION_NAME: str = "",
+        MISSION_ID: str = "",
+        PREVIOUS_JOB_ID: str = "",
+        JOB_ID: str = "",
+        JOB_NAME: str = "",
+        JOB_SEQUENCE: str = "",
+        REPORT_PATH: str = "",
+        SOURCE_TABLE_PATH: str = "",
+        DESTINATION_TABLE_PATH: str = "",
+        JOB_STATUS: str = "",
+        USE_GENERAL_TMP_TABLE: str = "",
+        BQ_CREATED_TIME: str = "",
+        BQ_UPDATED_TIME: str = ""
     ):
         """
         初始化 RequestMessage 物件，設定各項任務相關參數。

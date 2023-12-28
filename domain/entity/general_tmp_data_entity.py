@@ -19,7 +19,7 @@ class GeneralTmpData:
         Args:
             UUID_Request (str): Mission的唯一識別碼。
             MISSION_NAME (str): Mission的名稱。
-            JOB_NAME (str): 子任務名稱。
+            JOB_NAME (str): job名稱。
             RAW_DATA (str): 原始數據。
             BQ_CREATED_TIME (datetime): 記錄創建時間。
             BQ_UPDATED_TIME (datetime): 記錄更新時間。

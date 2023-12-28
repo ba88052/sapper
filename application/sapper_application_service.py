@@ -1,6 +1,6 @@
 from application.application_infra_port import ApplicationInfraPort
 from domain.service.job_selector import JobSelectorDomainService
-from domain.service.request_message_domain_service import RequestMessageDomainService
+from domain.entity.request_message_entity import RequestMessage
 import traceback
 from flask import g
 
@@ -13,7 +13,7 @@ class SapperApplicaionService:
             order_dict (dict): 內部要有parent_job_id, job_name
             db_respository (_type_): _description_
         """
-        self.request_message = RequestMessageDomainService().get_request_message(
+        self.request_message = RequestMessage(
             ORDER_DATA=message["order_data"],
             MISSION_NAME=message["mission_name"],
             MISSION_ID=message["mission_id"],
@@ -38,32 +38,37 @@ class SapperApplicaionService:
         根據傳入的job_name，和order_data執行子任務
         """
         try:
-            # 根據 job_name 選擇子任務 job
+            #  Task 1
+            #  根據 job_name 選擇子任務 job
             job = self.job_selector.select(
                 job_name=self.request_message.JOB_NAME,
                 mission_id=self.request_message.MISSION_ID,
                 mission_name=self.request_message.MISSION_NAME,
-                domain_infra_respository=g.DOMAIN_INFRA_ADAPTER,
+                domain_infra_respository=g.DOMAIN_INFRA_ADAPTER
             )
 
+            # Task 2
             # 將 order_data 丟入 job 中執行任務
             general_tmp_data_entity = job.execute(
                 order_data=self.request_message.ORDER_DATA,
                 source_table_path=self.request_message.SOURCE_TABLE_PATH,
-                previous_job_id=self.request_message.PREVIOUS_JOB_ID,
+                previous_job_id=self.request_message.PREVIOUS_JOB_ID
             )
             print(general_tmp_data_entity.TMP_DATA)
 
-            # 加入一些存table時需要的欄位
+            # Task 3
+            # 加入一些通用資料
             general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID
             general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
             general_tmp_data_entity.JOB_NAME = self.request_message.JOB_NAME
             general_tmp_data_entity.JOB_ID = self.request_message.JOB_ID
 
+            # Task 4
+            # 存入資料庫
             self.application_infra_respository.save_general_tmp_data(
                 destination_table_path=self.request_message.DESTINATION_TABLE_PATH,
                 general_tmp_data_entity=general_tmp_data_entity,
-                use_tmp_table=self.request_message.USE_GENERAL_TMP_TABLE,
+                use_tmp_table=self.request_message.USE_GENERAL_TMP_TABLE
             )
             self.report_message["job_status"] = "Success"
 
@@ -74,10 +79,11 @@ class SapperApplicaionService:
             self.report_message["job_status"] = "Fail"
             self.report_message["note"] = error_info
 
+        # Task 5
         # 回報任務狀態
         print(
             self.application_infra_respository.report_job_completed(
                 report_return_path=self.request_message.REPORT_PATH,
-                report_message=self.report_message,
+                report_message=self.report_message
             )
         )

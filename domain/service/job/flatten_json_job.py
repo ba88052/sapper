@@ -1,6 +1,6 @@
 from domain.service.job.job import Job
 from domain.domain_infra_port import DomainInfraPort
-from domain.service.general_tmp_domain_service import GeneralTmpDataDomainService
+from domain.entity.general_tmp_data_entity import GeneralTmpData
 import json
 
 
@@ -31,7 +31,7 @@ class FlattenJson(Job):
                 flatten_json_data = self.__flatten(data=data)
                 flatten_json_data = self.__convert_all_to_str(flatten_json_data)
                 flatten_json_data_list.append(flatten_json_data)
-        general_tmp_data_entity = GeneralTmpDataDomainService().get_gemeral_tmp_data(
+        general_tmp_data_entity = GeneralTmpData(
             TMP_DATA=flatten_json_data_list
         )
         return general_tmp_data_entity
