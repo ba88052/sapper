@@ -1,9 +1,15 @@
 class DomainInfraPort:
-    def get_config(self):
+    def get_infra_config(self):
         """
         讀取參數檔
         """
         raise NotImplementedError
+    
+    def get_monitoring_config(self):
+        """
+        讀取 monitoring 參數檔
+        """
+        return NotImplementedError
 
     def customize_select_from_source_table(self, source_table_path, conditions):
         """

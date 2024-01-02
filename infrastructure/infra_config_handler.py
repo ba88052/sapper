@@ -2,12 +2,20 @@
 import json
 
 
-def load_config():
+def load_infra_config():
     """
-    專門用來讀取檔案，其他需要config的程式，只需import此程式
+    專門用來讀取infra config檔案
     """
-    with open("./config.json", "r") as file:
+    with open("./infra_config.json", "r") as file:
         return json.load(file)
 
 
-CONFIG = load_config()
+def load_monitoring_config():
+    """
+    專門用來讀取mission process config檔案
+    """
+    with open("./monitoring_config.json", "r") as file:
+        return json.load(file)
+
+INFRA_CONFIG = load_infra_config()
+MONITORING_CONFIG = load_monitoring_config()

@@ -1,5 +1,6 @@
 from domain.domain_infra_port import DomainInfraPort
-from infrastructure.infra_config_handler import CONFIG
+from infrastructure.infra_config_handler import INFRA_CONFIG
+from infrastructure.infra_config_handler import MONITORING_CONFIG
 import json
 from infrastructure.bigquery.repository.source_table_repository import (
     SourceTableRepository,
@@ -10,11 +11,17 @@ class DomainRespositoryAdapter(DomainInfraPort):
     def __init__(self):
         self.config_file = "config.json"
 
-    def get_config(self):
+    def get_infra_config(self):
         """
-        讀取參數檔
+        讀取 infra 參數檔
         """
-        return CONFIG
+        return INFRA_CONFIG
+
+    def get_monitoring_config(self):
+        """
+        讀取 monitoring 參數檔
+        """
+        return MONITORING_CONFIG
 
     def customize_select_from_source_table(self, source_table_path, conditions):
         """

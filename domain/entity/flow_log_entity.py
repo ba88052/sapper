@@ -1,4 +1,4 @@
-class FlowTaskData:
+class FlowLog:
     def __init__(
         self,
         DATETIME: str = "",

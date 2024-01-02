@@ -1,0 +1,27 @@
+{
+    "flow_mapping":{
+        "scout" : "E01",
+        "sapper": "E02",
+        "liaison": "E03"
+        },
+    "task_mapping":{
+        "scout":{
+            },
+        "sapper":{
+            "select_job":"01",
+            "run_job":"02",
+            "add_shared_data":"03",
+            "save_data":"04",
+            "report_job":"05"
+            },
+        "liaison":{
+            }
+        },
+    "severity_mapping":{
+        "info":"00",
+        "notice":"01",
+        "debug":"44",
+        "error":"99"
+        }
+}
+    

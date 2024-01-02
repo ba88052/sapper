@@ -37,50 +37,63 @@ class SapperApplicaionService:
         """
         根據傳入的job_name，和order_data執行子任務
         """
-        try:
-            #  Task 1
-            #  根據 job_name 選擇子任務 job
-            job = self.job_selector.select(
-                job_name=self.request_message.JOB_NAME,
-                mission_id=self.request_message.MISSION_ID,
-                mission_name=self.request_message.MISSION_NAME,
-                domain_infra_respository=g.DOMAIN_INFRA_ADAPTER
-            )
+        #  Task 1
+        #  根據 job_name 選擇子任務 job
+        job = self.select_job()
 
-            # Task 2
-            # 將 order_data 丟入 job 中執行任務
-            general_tmp_data_entity = job.execute(
+        # Task 2
+        # 將 order_data 丟入 job 中執行任務
+        general_tmp_data_entity = self.execute_job(job)
+
+        # Task 3
+        # 加入一些通用資料
+        self.add_data(general_tmp_data_entity = general_tmp_data_entity)
+
+        # Task 4
+        # 存入資料庫
+        self.save_data(general_tmp_data_entity = general_tmp_data_entity)
+        self.report_message["job_status"] = "Success"
+        
+        # Task 5
+        # 回報任務狀態
+        self.report_job()
+
+    @log
+    def select_job(self):
+        job = self.job_selector.select(
+            job_name=self.request_message.JOB_NAME,
+            mission_id=self.request_message.MISSION_ID,
+            mission_name=self.request_message.MISSION_NAME,
+            domain_infra_respository=g.DOMAIN_INFRA_ADAPTER
+            )
+    
+    @log
+    def execute_job(self, job):
+        general_tmp_data_entity = job.execute(
                 order_data=self.request_message.ORDER_DATA,
                 source_table_path=self.request_message.SOURCE_TABLE_PATH,
                 previous_job_id=self.request_message.PREVIOUS_JOB_ID
             )
-            print(general_tmp_data_entity.TMP_DATA)
+        print(general_tmp_data_entity.TMP_DATA)
 
-            # Task 3
-            # 加入一些通用資料
-            general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID
-            general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
-            general_tmp_data_entity.JOB_NAME = self.request_message.JOB_NAME
-            general_tmp_data_entity.JOB_ID = self.request_message.JOB_ID
+    @log
+    def add_common_data(self, general_tmp_data_entity):
+        general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID
+        general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
+        general_tmp_data_entity.JOB_NAME = self.request_message.JOB_NAME
+        general_tmp_data_entity.JOB_ID = self.request_message.JOB_ID
 
-            # Task 4
-            # 存入資料庫
-            self.application_infra_respository.save_general_tmp_data(
-                destination_table_path=self.request_message.DESTINATION_TABLE_PATH,
-                general_tmp_data_entity=general_tmp_data_entity,
-                use_tmp_table=self.request_message.USE_GENERAL_TMP_TABLE
-            )
-            self.report_message["job_status"] = "Success"
+    @log
+    def save_table(self, general_tmp_data_entity):
+        self.application_infra_respository.save_general_tmp_data(
+            destination_table_path=self.request_message.DESTINATION_TABLE_PATH,
+            general_tmp_data_entity=general_tmp_data_entity,
+            use_tmp_table=self.request_message.USE_GENERAL_TMP_TABLE
+        )
+        self.report_message["job_status"] = "Success"
 
-        except Exception as e:
-            error_info = str(e) + traceback.format_exc()
-            error_info = error_info.replace("\n", "")
-            print("ERROR_INFO:", error_info)
-            self.report_message["job_status"] = "Fail"
-            self.report_message["note"] = error_info
-
-        # Task 5
-        # 回報任務狀態
+    @log
+    def report_job(self):
         print(
             self.application_infra_respository.report_job_completed(
                 report_return_path=self.request_message.REPORT_PATH,
