@@ -1,5 +1,5 @@
 import json
-from infrastructure.infra_config_handler import CONFIG
+from infrastructure.infra_config_handler import INFRA_CONFIG
 from google.cloud import pubsub_v1
 
 
@@ -9,5 +9,5 @@ class PubSubClient:
     """
 
     def __init__(self):
-        self.project_id = CONFIG["pubsub"]["project_name"]
+        self.project_id = INFRA_CONFIG["pubsub"]["project_name"]
         self.client = pubsub_v1.PublisherClient()

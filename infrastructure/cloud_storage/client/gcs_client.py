@@ -1,7 +1,7 @@
 import json
 
 from google.cloud import storage
-from infrastructure.infra_config_handler import CONFIG
+from infrastructure.infra_config_handler import INFRA_CONFIG
 
 
 class GcsClient:

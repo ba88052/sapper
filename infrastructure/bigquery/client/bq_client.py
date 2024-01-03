@@ -1,9 +1,7 @@
 import json
-
-import pandas as pd
 from google.cloud import bigquery
 
-from infrastructure.infra_config_handler import CONFIG
+from infrastructure.infra_config_handler import INFRA_CONFIG
 
 
 class BqClient:
@@ -12,7 +10,7 @@ class BqClient:
     """
 
     def __init__(self):
-        self.project = CONFIG["bigquery"]["project_name"]
+        self.project = INFRA_CONFIG["bigquery"]["project_name"]
         self.client = bigquery.Client(self.project)
 
     # 執行 SQL 查詢並返回結果的 DataFrame。
