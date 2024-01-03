@@ -3,8 +3,7 @@
         "project_name": "cdcda-lab-377808",
         "log":{
             "dataset_name": "SAM_LAB",
-            "api_log_table_name": "API_LOG_test_1122",
-            "flow_log_table_name": ""
+            "flow_log_table_name": "FLOW_LOG_test_0103"
         }
     },
     "pubsub": {

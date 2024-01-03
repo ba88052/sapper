@@ -1,5 +1,9 @@
 # Sapper 微服務
 
+## 優化方向
+1. infra 層拆成存 entity 存 json的，統一接口，然後讓adapter去做邏輯與傳參數和資料，
+2. 文件要寫如何新增新功能，如何改動邏輯。
+
 ## 服務概述
 
 Sapper 微服務專門用於資料的清理與整理，實現從一個數據表到另一個數據表的數據轉換。此服務利用 Google Cloud Platform 的功能，特別是 BigQuery 和 Pub/Sub，以實現高效的數據處理。

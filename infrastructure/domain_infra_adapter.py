@@ -47,3 +47,9 @@ class DomainRespositoryAdapter(DomainInfraPort):
             source_table_path=source_table_path
         ).customize_select(conditions=[f"JOB_ID = '{previous_job_id}'"])
         return result_data
+
+    def save_flow_log(self, flow_log_entity):
+        """
+        存 flow_log ，還需要發送 logging 到對應服務中做紀錄
+        """
+        
