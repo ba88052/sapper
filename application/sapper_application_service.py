@@ -1,19 +1,20 @@
 from application.application_infra_port import ApplicationInfraPort
 from domain.service.job_selector import JobSelectorDomainService
 from domain.entity.request_message_entity import RequestMessage
+from domain.service.error_handling import FlowErrorHandler
 import traceback
 from flask import g
 
 
-class SapperApplicaionService:
+class SapperApplicationService:
     def __init__(self, message, application_infra_respository=ApplicationInfraPort()):
         """_summary_
 
         Args:
-            order_dict (dict): 內部要有parent_job_id, job_name
-            db_respository (_type_): _description_
+            message (dict)
+            application_infra_respository (_type_): _description_
         """
-        self.request_message = RequestMessage(
+        g.request_message_entity = RequestMessage(
             ORDER_DATA=message["order_data"],
             MISSION_NAME=message["mission_name"],
             MISSION_ID=message["mission_id"],
@@ -27,13 +28,17 @@ class SapperApplicaionService:
             JOB_STATUS=message["job_status"],
             USE_GENERAL_TMP_TABLE=message["use_general_tmp_table"],
         )
+        # self.flow_error_handler = FlowErrorHandler(flow_name = g.request_message_entity.JOB_NAME,
+        #                                             flow_id = g.request_message_entity.JOB_ID,
+        #                                             executor = self.executor, 
+        #                                             domain_infra_respository = application_infra_respository)
         self.report_message = message
         self.report_message["job_status"] = "Process"
         self.report_message["note"] = ""
         self.application_infra_respository = application_infra_respository
         self.job_selector = JobSelectorDomainService()
 
-    def execute_job(self):
+    def execute(self):
         """
         根據傳入的job_name，和order_data執行子任務
         """
@@ -58,45 +63,47 @@ class SapperApplicaionService:
         # 回報任務狀態
         self.report_job()
 
-    @log
+    
+    # 不使用 self.request_message_entity 是因為吃不到，裝飾器創立時，self還沒有實例，如果要用self要改很多東西
+    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
     def select_job(self):
         job = self.job_selector.select(
-            job_name=self.request_message.JOB_NAME,
-            mission_id=self.request_message.MISSION_ID,
-            mission_name=self.request_message.MISSION_NAME,
+            job_name=g.request_message_entity.JOB_NAME,
+            mission_id=g.request_message_entity.MISSION_ID,
+            mission_name=g.request_message_entity.MISSION_NAME,
             domain_infra_respository=g.DOMAIN_INFRA_ADAPTER
             )
     
-    @log
+    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
     def execute_job(self, job):
         general_tmp_data_entity = job.execute(
-                order_data=self.request_message.ORDER_DATA,
-                source_table_path=self.request_message.SOURCE_TABLE_PATH,
-                previous_job_id=self.request_message.PREVIOUS_JOB_ID
+                order_data=g.request_message_entity.ORDER_DATA,
+                source_table_path=g.request_message_entity.SOURCE_TABLE_PATH,
+                previous_job_id=g.request_message_entity.PREVIOUS_JOB_ID
             )
         print(general_tmp_data_entity.TMP_DATA)
 
-    @log
+    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
     def add_common_data(self, general_tmp_data_entity):
-        general_tmp_data_entity.UUID_Request = self.request_message.MISSION_ID
-        general_tmp_data_entity.MISSION_NAME = self.request_message.MISSION_NAME
-        general_tmp_data_entity.JOB_NAME = self.request_message.JOB_NAME
-        general_tmp_data_entity.JOB_ID = self.request_message.JOB_ID
+        general_tmp_data_entity.UUID_Request = g.request_message_entity.MISSION_ID
+        general_tmp_data_entity.MISSION_NAME = g.request_message_entity.MISSION_NAME
+        general_tmp_data_entity.JOB_NAME = g.request_message_entity.JOB_NAME
+        general_tmp_data_entity.JOB_ID = g.request_message_entity.JOB_ID
 
-    @log
+    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
     def save_table(self, general_tmp_data_entity):
         self.application_infra_respository.save_general_tmp_data(
-            destination_table_path=self.request_message.DESTINATION_TABLE_PATH,
+            destination_table_path=g.request_message_entity.DESTINATION_TABLE_PATH,
             general_tmp_data_entity=general_tmp_data_entity,
-            use_tmp_table=self.request_message.USE_GENERAL_TMP_TABLE
+            use_tmp_table=g.request_message_entity.USE_GENERAL_TMP_TABLE
         )
         self.report_message["job_status"] = "Success"
 
-    @log
+    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
     def report_job(self):
         print(
             self.application_infra_respository.report_job_completed(
-                report_return_path=self.request_message.REPORT_PATH,
+                report_return_path=g.request_message_entity.REPORT_PATH,
                 report_message=self.report_message
             )
         )

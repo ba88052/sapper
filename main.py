@@ -17,6 +17,7 @@ app.register_blueprint(api_routes.routes)
 def setup_global_objects():
     g.APPLICATION_INFRA_ADAPTOR = ApplicationRespositoryAdapter()
     g.DOMAIN_INFRA_ADAPTER = DomainRespositoryAdapter()
+    g.EXECUTOR = "sapper"
 
 
 # g.CLEANE_DATA_ADAPTOR = DomainRespositoryAdapter()

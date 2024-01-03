@@ -3,7 +3,7 @@ import json
 
 from flask import Blueprint, g, make_response, request
 
-from application.sapper_application_service import SapperApplicaionService
+from application.sapper_application_service import SapperApplicationService
 
 # 會吃main.py的flask啟動設定
 routes = Blueprint("routes", __name__)
@@ -33,9 +33,9 @@ def execute_collect_mission():
     """
     order_dict = get_pubsub_message()
     print("AAAA")
-    SapperApplicaionService(
+    SapperApplicationService(
         message=order_dict, application_infra_respository=g.APPLICATION_INFRA_ADAPTOR
-    ).execute_job()
+    ).execute()
     print("PPPPP")
     return make_response((f"success", 204))
 
