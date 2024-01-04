@@ -54,11 +54,11 @@ class SapperApplicationService:
 
         # Task 3
         # 加入一些通用資料
-        self.add_data(general_tmp_data_entity = general_tmp_data_entity)
+        self.add_common_data(general_tmp_data_entity = general_tmp_data_entity)
 
         # Task 4
         # 存入資料庫
-        self.save_data(general_tmp_data_entity = general_tmp_data_entity)
+        self.save_table(general_tmp_data_entity = general_tmp_data_entity)
         self.report_message["job_status"] = "Success"
         
         # Task 5
@@ -66,7 +66,6 @@ class SapperApplicationService:
         self.report_job()
 
     
-    # 不使用 self.request_message_entity 是因為吃不到，裝飾器創立時，self還沒有實例，如果要用self要改很多東西
     @FlowErrorHandler.flow_log_decorator
     def select_job(self):
         job = self.job_selector.select(
@@ -75,6 +74,7 @@ class SapperApplicationService:
             mission_name=self.request_message_entity.MISSION_NAME,
             domain_infra_respository=self.domain_infra_respository
             )
+        return job
     
     @FlowErrorHandler.flow_log_decorator
     def execute_job(self, job):
@@ -84,6 +84,7 @@ class SapperApplicationService:
                 previous_job_id=self.request_message_entity.PREVIOUS_JOB_ID
             )
         print(general_tmp_data_entity.TMP_DATA)
+        return general_tmp_data_entity
 
     @FlowErrorHandler.flow_log_decorator
     def add_common_data(self, general_tmp_data_entity):

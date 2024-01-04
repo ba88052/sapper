@@ -18,10 +18,10 @@
             }
         },
     "severity_mapping":{
-        "info":"00",
-        "notice":"01",
-        "debug":"44",
-        "error":"99"
+        "INFO":"00",
+        "NOTICE":"01",
+        "DEBUG":"44",
+        "ERROR":"99"
         }
 }
     
