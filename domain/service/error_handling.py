@@ -85,7 +85,7 @@ class FlowErrorHandler:
 
         """
         flow_number = cls.monitoring_config["flow_mapping"][executor]
-        task_number = cls.monitoring_config["task_mapping"][task_name]
+        task_number = cls.monitoring_config["task_mapping"][executor][task_name]
         severity_number = cls.monitoring_config["severity_mapping"][severity]
         task_code = flow_number + task_number + severity_number
         return task_code
