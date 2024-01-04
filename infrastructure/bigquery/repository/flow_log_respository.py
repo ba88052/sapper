@@ -5,9 +5,9 @@ from datetime import datetime, timezone
 from infrastructure.infra_config_handler import INFRA_CONFIG
 
 
-class ApiLogRepository(BqClient):
+class FLowLogRepository(BqClient):
     """
-    負責涉及 api_log 表格的操作
+    負責涉及 flow_log 表格的操作
     """
 
     def __init__(self):

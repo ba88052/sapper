@@ -5,7 +5,7 @@ import json
 from infrastructure.bigquery.repository.source_table_repository import (
     SourceTableRepository,
 )
-
+from infrastructure.bigquery.repository.flow_log_respository import FLowLogRepository
 
 class DomainRespositoryAdapter(DomainInfraPort):
     def __init__(self):
@@ -52,4 +52,5 @@ class DomainRespositoryAdapter(DomainInfraPort):
         """
         存 flow_log ，還需要發送 logging 到對應服務中做紀錄
         """
+        FLowLogRepository().save(flow_log_entity)
         
