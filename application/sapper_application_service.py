@@ -50,7 +50,7 @@ class SapperApplicationService:
 
         # Task 2
         # 將 order_data 丟入 job 中執行任務
-        general_tmp_data_entity = self.execute_job(job)
+        general_tmp_data_entity = self.run_job(job)
 
         # Task 3
         # 加入一些通用資料
