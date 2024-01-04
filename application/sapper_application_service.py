@@ -5,7 +5,6 @@ from domain.service.error_handling import FlowErrorHandler
 import traceback
 from flask import g
 
-g.request_message_entity = {}
 
 class SapperApplicationService:
     def __init__(self, message, application_infra_respository=ApplicationInfraPort()):
@@ -15,7 +14,7 @@ class SapperApplicationService:
             message (dict)
             application_infra_respository (_type_): _description_
         """
-        g.request_message_entity = RequestMessage(
+        self.request_message_entity = RequestMessage(
             ORDER_DATA=message["order_data"],
             MISSION_NAME=message["mission_name"],
             MISSION_ID=message["mission_id"],
@@ -66,7 +65,7 @@ class SapperApplicationService:
 
     
     # 不使用 self.request_message_entity 是因為吃不到，裝飾器創立時，self還沒有實例，如果要用self要改很多東西
-    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
+    @FlowErrorHandler.flow_log_decorator
     def select_job(self):
         job = self.job_selector.select(
             job_name=g.request_message_entity.JOB_NAME,
@@ -75,7 +74,7 @@ class SapperApplicationService:
             domain_infra_respository=g.DOMAIN_INFRA_ADAPTER
             )
     
-    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
+    @FlowErrorHandler.flow_log_decorator
     def execute_job(self, job):
         general_tmp_data_entity = job.execute(
                 order_data=g.request_message_entity.ORDER_DATA,
@@ -84,14 +83,14 @@ class SapperApplicationService:
             )
         print(general_tmp_data_entity.TMP_DATA)
 
-    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
+    @FlowErrorHandler.flow_log_decorator
     def add_common_data(self, general_tmp_data_entity):
         general_tmp_data_entity.UUID_Request = g.request_message_entity.MISSION_ID
         general_tmp_data_entity.MISSION_NAME = g.request_message_entity.MISSION_NAME
         general_tmp_data_entity.JOB_NAME = g.request_message_entity.JOB_NAME
         general_tmp_data_entity.JOB_ID = g.request_message_entity.JOB_ID
 
-    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
+    @FlowErrorHandler.flow_log_decorator
     def save_table(self, general_tmp_data_entity):
         self.application_infra_respository.save_general_tmp_data(
             destination_table_path=g.request_message_entity.DESTINATION_TABLE_PATH,
@@ -100,7 +99,7 @@ class SapperApplicationService:
         )
         self.report_message["job_status"] = "Success"
 
-    @FlowErrorHandler.flow_log_decorator(request_message_entity = g.request_message_entity, domain_infra_respository = g.DOMAIN_INFRA_ADAPTER)
+    @FlowErrorHandler.flow_log_decorator
     def report_job(self):
         print(
             self.application_infra_respository.report_job_completed(

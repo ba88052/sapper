@@ -6,40 +6,40 @@ from datetime import datetime
 
 class FlowErrorHandler:
     @classmethod
-    def flow_log_decorator(cls, request_message_entity, domain_infra_respository = DomainInfraPort()):
-        def decorator(func):
-            """ 流程日誌裝飾器，用於記錄任務的成功或失敗狀態。
+    def flow_log_decorator(cls, func):
+        """ 流程日誌裝飾器，用於記錄任務的成功或失敗狀態。
 
-            Args:
-                func (function): 被裝飾的函數。
+        Args:
+            func (function): 被裝飾的函數。
 
-            Returns:
-                function: 包裝後的函數。
+        Returns:
+            function: 包裝後的函數。
 
-            """
-            def wrapper(*args, **kwargs):
-                cls.flow_name = request_message_entity.JOB_NAME
-                cls.flow_id = request_message_entity.JOB_ID
-                cls.executor = g.EXECUTOR
-                cls.infra_respository = domain_infra_respository
-                cls.monitoring_config = cls.infra_respository.get_monitoring_config()
-                
-                current_time = datetime.now()
-                current_time_str = current_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-                task_name = func.__name__
-                flow_log_entity = FlowLog(DATETIME = current_time_str, FLOW_ID = cls.flow_id, FLOW_NAME = cls.flow_name, TASK_NAME = task_name)
-                try:
-                    result = func(cls, *args, **kwargs)
-                    cls.flow_log_on_success(log_entity = flow_log_entity, task_name = task_name)
-                    return result
-                except DebugError as d:
-                    cls.flow_log_on_fail(log_entity = flow_log_entity, error = d, severity = "DEBUG")
-                    return
-                except Exception as e:
-                    cls.flow_log_on_fail(log_entity = flow_log_entity, error = e, severity = "ERROR")
-                    raise
-            return wrapper
-        return decorator
+        """
+        def wrapper(service_instance, *args, **kwargs):
+            cls.flow_name = service_instance.request_message_entity.JOB_NAME
+            print("裝飾器 flow name", cls.flow_name)
+            cls.flow_id = service_instance.request_message_entity.JOB_ID
+            print("裝飾器 flow id", cls.flow_id)
+            cls.executor = g.EXECUTOR
+            cls.infra_respository = service_instance.domain_infra_respository
+            cls.monitoring_config = cls.infra_respository.get_monitoring_config()
+            
+            current_time = datetime.now()
+            current_time_str = current_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+            task_name = func.__name__
+            flow_log_entity = FlowLog(DATETIME = current_time_str, FLOW_ID = cls.flow_id, FLOW_NAME = cls.flow_name, TASK_NAME = task_name)
+            try:
+                result = func(cls, *args, **kwargs)
+                cls.flow_log_on_success(log_entity = flow_log_entity, task_name = task_name)
+                return result
+            except DebugError as d:
+                cls.flow_log_on_fail(log_entity = flow_log_entity, error = d, severity = "DEBUG")
+                return
+            except Exception as e:
+                cls.flow_log_on_fail(log_entity = flow_log_entity, error = e, severity = "ERROR")
+                raise
+        return wrapper
 
     @classmethod
     def flow_log_on_success(cls, log_entity):
