@@ -5,6 +5,7 @@ from domain.service.error_handling import FlowErrorHandler
 import traceback
 from flask import g
 
+g.request_message_entity = {}
 
 class SapperApplicationService:
     def __init__(self, message, application_infra_respository=ApplicationInfraPort()):
