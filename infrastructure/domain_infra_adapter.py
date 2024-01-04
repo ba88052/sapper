@@ -1,6 +1,6 @@
 from domain.domain_infra_port import DomainInfraPort
-from infrastructure.infra_config_handler import INFRA_CONFIG
-from infrastructure.infra_config_handler import MONITORING_CONFIG
+from infrastructure.config_handler import INFRA_CONFIG
+from infrastructure.config_handler import MONITORING_CONFIG
 import json
 from infrastructure.bigquery.repository.source_table_repository import (
     SourceTableRepository,

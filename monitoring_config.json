@@ -5,7 +5,12 @@
         "liaison": "E03"
         },
     "task_mapping":{
-        "scout":{
+        "scout":{            
+            "select_job":"01",
+            "run_job":"02",
+            "add_shared_data":"03",
+            "save_data":"04",
+            "report_job":"05"
             },
         "sapper":{
             "select_job":"01",

@@ -1,7 +1,7 @@
 import json
 from google.cloud import bigquery
 
-from infrastructure.infra_config_handler import INFRA_CONFIG
+from infrastructure.config_handler import INFRA_CONFIG
 
 
 class BqClient:

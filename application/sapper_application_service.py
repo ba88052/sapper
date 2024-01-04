@@ -31,6 +31,11 @@ class SapperApplicationService:
             USE_GENERAL_TMP_TABLE=message["use_general_tmp_table"],
         )
         # 初始化其他屬性
+        self.executor = "sapper"
+        self.job_id = self.request_message_entity.JOB_ID
+        self.job_name = self.request_message_entity.JOB_NAME
+        self.mission_id = self.request_message_entity.MISSION_ID
+        self.mission_name = self.request_message_entity.MISSION_NAME
         self.report_message = message
         self.report_message["job_status"] = "Process"
         self.report_message["note"] = ""

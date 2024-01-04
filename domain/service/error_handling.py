@@ -19,9 +19,9 @@ class FlowErrorHandler:
         # 包裝函數
         def wrapper(service_instance, *args, **kwargs):
             # 設置流程相關的屬性
-            cls.flow_name = service_instance.request_message_entity.JOB_NAME
-            cls.flow_id = service_instance.request_message_entity.MISSION_ID
-            cls.executor = g.EXECUTOR
+            cls.flow_id = f"{service_instance.job_name}_{service_instance.mission_id}_{service_instance.job_id}"
+            cls.flow_name = f"{service_instance.mission_name}_{service_instance.job_name}"
+            cls.executor = service_instance.executor
             cls.infra_respository = service_instance.domain_infra_respository
             cls.monitoring_config = cls.infra_respository.get_monitoring_config()
             

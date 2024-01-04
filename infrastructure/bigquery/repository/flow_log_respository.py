@@ -2,7 +2,7 @@ import json
 
 from infrastructure.bigquery.client.bq_client import BqClient
 from datetime import datetime, timezone
-from infrastructure.infra_config_handler import INFRA_CONFIG
+from infrastructure.config_handler import INFRA_CONFIG
 
 
 class FLowLogRepository(BqClient):

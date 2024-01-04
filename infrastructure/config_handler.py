@@ -6,7 +6,7 @@ def load_infra_config():
     """
     專門用來讀取infra config檔案
     """
-    with open("./infra_config.json", "r") as file:
+    with open("./sapper_infra_config.json", "r") as file:
         return json.load(file)
 
 
