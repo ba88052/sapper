@@ -54,11 +54,11 @@ class SapperApplicationService:
 
         # Task 3
         # 加入一些通用資料
-        self.add_common_data(general_tmp_data_entity = general_tmp_data_entity)
+        self.add_shared_data(general_tmp_data_entity = general_tmp_data_entity)
 
         # Task 4
         # 存入資料庫
-        self.save_table(general_tmp_data_entity = general_tmp_data_entity)
+        self.save_data(general_tmp_data_entity = general_tmp_data_entity)
         self.report_message["job_status"] = "Success"
         
         # Task 5
@@ -87,14 +87,14 @@ class SapperApplicationService:
         return general_tmp_data_entity
 
     @FlowErrorHandler.flow_log_decorator
-    def add_common_data(self, general_tmp_data_entity):
+    def add_shared_data(self, general_tmp_data_entity):
         general_tmp_data_entity.UUID_Request = self.request_message_entity.MISSION_ID
         general_tmp_data_entity.MISSION_NAME = self.request_message_entity.MISSION_NAME
         general_tmp_data_entity.JOB_NAME = self.request_message_entity.JOB_NAME
         general_tmp_data_entity.JOB_ID = self.request_message_entity.JOB_ID
 
     @FlowErrorHandler.flow_log_decorator
-    def save_table(self, general_tmp_data_entity):
+    def save_data(self, general_tmp_data_entity):
         self.application_infra_respository.save_general_tmp_data(
             destination_table_path=self.request_message_entity.DESTINATION_TABLE_PATH,
             general_tmp_data_entity=general_tmp_data_entity,
