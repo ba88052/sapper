@@ -77,7 +77,7 @@ class SapperApplicationService:
         return job
     
     @FlowErrorHandler.flow_log_decorator
-    def execute_job(self, job):
+    def run_job(self, job):
         general_tmp_data_entity = job.execute(
                 order_data=self.request_message_entity.ORDER_DATA,
                 source_table_path=self.request_message_entity.SOURCE_TABLE_PATH,
