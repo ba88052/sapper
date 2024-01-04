@@ -31,7 +31,7 @@ class FlowErrorHandler:
             flow_log_entity = FlowLog(DATETIME = current_time_str, FLOW_ID = cls.flow_id, FLOW_NAME = cls.flow_name, TASK_NAME = task_name)
             try:
                 result = func(service_instance, *args, **kwargs)
-                cls.flow_log_on_success(log_entity = flow_log_entity, task_name = task_name)
+                cls.flow_log_on_success(log_entity = flow_log_entity)
                 return result
             except DebugError as d:
                 cls.flow_log_on_fail(log_entity = flow_log_entity, error = d, severity = "DEBUG")
