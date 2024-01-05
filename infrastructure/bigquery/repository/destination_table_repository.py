@@ -1,7 +1,7 @@
 import json
+from datetime import datetime, timezone
 
 from infrastructure.bigquery.client.bq_client import BqClient
-from datetime import datetime, timezone
 from infrastructure.config_handler import INFRA_CONFIG
 
 
@@ -65,7 +65,7 @@ class DestinationTableRepository(BqClient):
         Returns:
             dict: 目標表的schema dict
         """
-        
+
         table = self.client.get_table(table_id)
         schema_field_names = {field.name for field in table.schema}
         print("schema", schema_field_names)
@@ -82,7 +82,7 @@ class DestinationTableRepository(BqClient):
         Returns:
             dict: 整理後的資料
         """
-        
+
         bq_created_time = datetime.now()
         bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")

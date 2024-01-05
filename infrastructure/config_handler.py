@@ -17,5 +17,6 @@ def load_monitoring_config():
     with open("./monitoring_config.json", "r") as file:
         return json.load(file)
 
+
 INFRA_CONFIG = load_infra_config()
 MONITORING_CONFIG = load_monitoring_config()

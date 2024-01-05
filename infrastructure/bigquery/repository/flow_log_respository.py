@@ -1,7 +1,7 @@
 import json
+from datetime import datetime, timezone
 
 from infrastructure.bigquery.client.bq_client import BqClient
-from datetime import datetime, timezone
 from infrastructure.config_handler import INFRA_CONFIG
 
 
@@ -35,9 +35,8 @@ class FLowLogRepository(BqClient):
                 f"Errors occurred while storing api_log to BigQuery: {insertion_errors}"
             )
         else:
-            print(
-                "api_log stored successfully to BigQuery.")
-            
+            print("api_log stored successfully to BigQuery.")
+
     def __get_table_schema(self, table_id):
         """
         # 獲取 BigQuery 表的 schema
@@ -48,7 +47,7 @@ class FLowLogRepository(BqClient):
         Returns:
             dict: 目標表的schema dict
         """
-        
+
         table = self.client.get_table(table_id)
         schema_field_names = {field.name for field in table.schema}
         print("schema", schema_field_names)

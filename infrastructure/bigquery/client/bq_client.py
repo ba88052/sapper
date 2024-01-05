@@ -1,4 +1,5 @@
 import json
+
 from google.cloud import bigquery
 
 from infrastructure.config_handler import INFRA_CONFIG

@@ -1,10 +1,8 @@
 from application.application_infra_port import ApplicationInfraPort
-from infrastructure.bigquery.repository.destination_table_repository import (
-    DestinationTableRepository,
-)
-from infrastructure.pubsub.repository.report_job_completed_repository import (
-    ReportJobCompletedRepository,
-)
+from infrastructure.bigquery.repository.destination_table_repository import \
+    DestinationTableRepository
+from infrastructure.pubsub.repository.report_job_completed_repository import \
+    ReportJobCompletedRepository
 
 
 class ApplicationRespositoryAdapter(ApplicationInfraPort):

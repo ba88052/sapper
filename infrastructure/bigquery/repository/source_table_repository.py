@@ -1,7 +1,7 @@
 import json
+from datetime import datetime
 
 from infrastructure.bigquery.client.bq_client import BqClient
-from datetime import datetime
 from infrastructure.config_handler import INFRA_CONFIG
 
 

@@ -1,7 +1,8 @@
-from domain.service.job.job import Job
+import json
+
 from domain.domain_infra_port import DomainInfraPort
 from domain.entity.general_tmp_data_entity import GeneralTmpData
-import json
+from domain.service.job.job import Job
 
 
 class FlattenJson(Job):
@@ -31,9 +32,7 @@ class FlattenJson(Job):
                 flatten_json_data = self.__flatten(data=data)
                 flatten_json_data = self.__convert_all_to_str(flatten_json_data)
                 flatten_json_data_list.append(flatten_json_data)
-        general_tmp_data_entity = GeneralTmpData(
-            TMP_DATA=flatten_json_data_list
-        )
+        general_tmp_data_entity = GeneralTmpData(TMP_DATA=flatten_json_data_list)
         return general_tmp_data_entity
 
     def __flatten(self, data, parent_key="", sep="_"):

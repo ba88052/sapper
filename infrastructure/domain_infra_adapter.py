@@ -1,11 +1,12 @@
-from domain.domain_infra_port import DomainInfraPort
-from infrastructure.config_handler import INFRA_CONFIG
-from infrastructure.config_handler import MONITORING_CONFIG
 import json
-from infrastructure.bigquery.repository.source_table_repository import (
-    SourceTableRepository,
-)
-from infrastructure.bigquery.repository.flow_log_respository import FLowLogRepository
+
+from domain.domain_infra_port import DomainInfraPort
+from infrastructure.bigquery.repository.flow_log_respository import \
+    FLowLogRepository
+from infrastructure.bigquery.repository.source_table_repository import \
+    SourceTableRepository
+from infrastructure.config_handler import INFRA_CONFIG, MONITORING_CONFIG
+
 
 class DomainRespositoryAdapter(DomainInfraPort):
     def __init__(self):
@@ -53,4 +54,3 @@ class DomainRespositoryAdapter(DomainInfraPort):
         存 flow_log ，還需要發送 logging 到對應服務中做紀錄
         """
         FLowLogRepository().save(flow_log_entity)
-        

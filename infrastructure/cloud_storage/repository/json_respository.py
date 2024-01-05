@@ -1,5 +1,6 @@
-from infrastructure.cloud_storage.client.gcs_client import GcsClient
 import json
+
+from infrastructure.cloud_storage.client.gcs_client import GcsClient
 
 
 class JsonRepository(GcsClient):

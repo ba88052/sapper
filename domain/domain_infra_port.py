@@ -4,7 +4,7 @@ class DomainInfraPort:
         讀取參數檔
         """
         raise NotImplementedError
-    
+
     def get_monitoring_config(self):
         """
         讀取 monitoring 參數檔
@@ -29,7 +29,7 @@ class DomainInfraPort:
             source_table_path (_type_): _description_
         """
         pass
-    
+
     def save_flow_log(self, flow_log_entity):
         """
         存 flow_log ，還需要發送 logging 到對應服務中做紀錄

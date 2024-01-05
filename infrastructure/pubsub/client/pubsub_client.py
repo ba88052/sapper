@@ -1,6 +1,8 @@
 import json
-from infrastructure.config_handler import INFRA_CONFIG
+
 from google.cloud import pubsub_v1
+
+from infrastructure.config_handler import INFRA_CONFIG
 
 
 class PubSubClient:

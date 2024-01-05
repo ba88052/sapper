@@ -17,7 +17,7 @@ class RequestMessage:
         JOB_STATUS: str = "",
         USE_GENERAL_TMP_TABLE: str = "",
         BQ_CREATED_TIME: str = "",
-        BQ_UPDATED_TIME: str = ""
+        BQ_UPDATED_TIME: str = "",
     ):
         """
         初始化 RequestMessage 物件，設定各項任務相關參數。

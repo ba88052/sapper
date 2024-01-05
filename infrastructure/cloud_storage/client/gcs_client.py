@@ -1,6 +1,7 @@
 import json
 
 from google.cloud import storage
+
 from infrastructure.config_handler import INFRA_CONFIG
 
 

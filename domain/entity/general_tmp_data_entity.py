@@ -2,6 +2,7 @@ from datetime import datetime
 
 # 優化方向 TMP DATA 改存 GCS or 改成 每一個只能處理單筆資料
 
+
 class GeneralTmpData:
     def __init__(
         self,
