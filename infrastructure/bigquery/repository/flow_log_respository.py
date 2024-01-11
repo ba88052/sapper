@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timezone
 
 from infrastructure.bigquery.client.bq_client import BqClient
-from infrastructure.config_handler import SCOUT_INFRA_CONFIG
+from infrastructure.config_handler import INFRA_CONFIG
 
 
 class FLowLogRepository(BqClient):
@@ -12,8 +12,8 @@ class FLowLogRepository(BqClient):
 
     def __init__(self):
         super().__init__()
-        self.dataset = SCOUT_INFRA_CONFIG["bigquery"]["log"]["dataset_name"]
-        self.table = SCOUT_INFRA_CONFIG["bigquery"]["log"]["flow_log_table_name"]
+        self.dataset = INFRA_CONFIG["bigquery"]["log"]["dataset_name"]
+        self.table = INFRA_CONFIG["bigquery"]["log"]["flow_log_table_name"]
         self.bigquery_table_id = f"{self.project}.{self.dataset}.{self.table}"
 
     def save(self, flow_log):
