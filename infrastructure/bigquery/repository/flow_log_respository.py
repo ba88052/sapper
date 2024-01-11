@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timezone
 
 from infrastructure.bigquery.client.bq_client import BqClient
-from infrastructure.config_handler import INFRA_CONFIG
+from infrastructure.infra_config_handler import SCOUT_INFRA_CONFIG
 
 
 class FLowLogRepository(BqClient):
@@ -12,8 +12,8 @@ class FLowLogRepository(BqClient):
 
     def __init__(self):
         super().__init__()
-        self.dataset = INFRA_CONFIG["bigquery"]["log"]["dataset_name"]
-        self.table = INFRA_CONFIG["bigquery"]["log"]["flow_log_table_name"]
+        self.dataset = SCOUT_INFRA_CONFIG["bigquery"]["log"]["dataset_name"]
+        self.table = SCOUT_INFRA_CONFIG["bigquery"]["log"]["flow_log_table_name"]
         self.bigquery_table_id = f"{self.project}.{self.dataset}.{self.table}"
 
     def save(self, flow_log):
@@ -23,7 +23,7 @@ class FLowLogRepository(BqClient):
         Args:
             flow_log (flow_log)
         """
-        flow_log_dict = self.__convert_api_log_entity_to_bq_format(flow_log)
+        flow_log_dict = self.__convert_flow_log_entity_to_bq_format(flow_log)
 
         print(flow_log_dict)
 
@@ -32,10 +32,10 @@ class FLowLogRepository(BqClient):
         )
         if insertion_errors:
             print(
-                f"Errors occurred while storing api_log to BigQuery: {insertion_errors}"
+                f"Errors occurred while storing flow_log to BigQuery: {insertion_errors}"
             )
         else:
-            print("api_log stored successfully to BigQuery.")
+            print("flow_log stored successfully to BigQuery.")
 
     def __get_table_schema(self, table_id):
         """
@@ -53,12 +53,12 @@ class FLowLogRepository(BqClient):
         print("schema", schema_field_names)
         return schema_field_names
 
-    def __convert_api_log_entity_to_bq_format(self, flow_log):
+    def __convert_flow_log_entity_to_bq_format(self, flow_log):
         """
         把entity轉換成可以存入BQ的格式
 
         Args:
-            api_log (api_log實體)
+            flow_log (flow_log實體)
 
         Returns:
             dict: 可存入BQ的格式
@@ -78,5 +78,4 @@ class FLowLogRepository(BqClient):
         for field in schema_field_names:
             # 如果該欄位在 destination_data 中存在，則使用其值，否則使用預設值 ""
             filled_data[field] = flow_log_dict.get(field, "")
-        print(filled_data)
         return filled_data
