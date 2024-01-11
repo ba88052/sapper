@@ -31,15 +31,16 @@ def execute_collect_mission():
     """
     專門用來接收pub/sub的訊息，觸發將傳入範圍切小後打出去的接口
     """
-    order_dict = get_pubsub_message()
-    print("AAAA")
-    SapperApplicationService(
-        message=order_dict,
-        application_infra_respository=g.APPLICATION_INFRA_ADAPTOR,
-        domain_infra_respository=g.DOMAIN_INFRA_ADAPTER,
-    ).execute()
-    print("PPPPP")
-    return make_response((f"success", 204))
+    try:
+        order_dict = get_pubsub_message()
+        SapperApplicationService(
+            message=order_dict,
+            application_infra_respository=g.APPLICATION_INFRA_ADAPTOR,
+            domain_infra_respository=g.DOMAIN_INFRA_ADAPTER,
+        ).execute()
+        return make_response((f"success", 204))
+    except:
+        return make_response((f"fail", 204))
 
 
 # @routes.route("/test", methods=["POST"])
