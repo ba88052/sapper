@@ -12,8 +12,6 @@ class GeneralTmpData:
         JOB_NAME: str = "",
         TMP_DATA: list = [],
         JOB_SEQUENCE: str = "",
-        BQ_CREATED_TIME: str = "",
-        BQ_UPDATED_TIME: str = "",
     ):
         """
         定義 RawTable 實體的參數。
@@ -32,5 +30,3 @@ class GeneralTmpData:
         self.JOB_NAME = JOB_NAME
         self.TMP_DATA = TMP_DATA
         self.JOB_SEQUENCE = JOB_SEQUENCE
-        self.BQ_CREATED_TIME = BQ_CREATED_TIME
-        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME

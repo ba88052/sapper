@@ -1,4 +1,5 @@
 import json
+from google.cloud import logging
 
 from domain.domain_infra_port import DomainInfraPort
 from infrastructure.bigquery.repository.flow_log_respository import \
@@ -54,3 +55,8 @@ class DomainRespositoryAdapter(DomainInfraPort):
         存 flow_log ，還需要發送 logging 到對應服務中做紀錄
         """
         FLowLogRepository().save(flow_log_entity)
+        logging_client = logging.Client()
+        log_name = "custom-log"
+        logger = logging_client.logger(log_name)
+        flow_log_dict = vars(flow_log_entity)
+        logger.log_struct(flow_log_dict, severity=flow_log_entity.SEVERITY)

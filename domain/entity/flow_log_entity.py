@@ -8,9 +8,7 @@ class FlowLog:
         TASK_NAME: str = "",
         STATUS: str = "",
         MESSAGE: str = "",
-        SEVERITY: str = "",
-        BQ_CREATED_TIME: str = "",
-        BQ_UPDATED_TIME: str = "",
+        SEVERITY: str = ""
     ):
         """
         定義 FlowTaskData 實體的參數。
@@ -33,5 +31,3 @@ class FlowLog:
         self.STATUS = STATUS
         self.MESSAGE = MESSAGE
         self.SEVERITY = SEVERITY
-        self.BQ_CREATED_TIME = BQ_CREATED_TIME
-        self.BQ_UPDATED_TIME = BQ_UPDATED_TIME
