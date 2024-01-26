@@ -34,12 +34,12 @@ class FlowErrorHandler:
             # 記錄當前時間
             current_time = datetime.now()
             current_time_str = current_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-            task_name = func.__name__
+            cls.task_name = func.__name__
             flow_log_entity = FlowLog(
                 DATETIME=current_time_str,
                 FLOW_ID=cls.flow_id,
                 FLOW_NAME=cls.flow_name,
-                TASK_NAME=task_name,
+                TASK_NAME=cls.task_name,
             )
             try:
                 # 執行被裝飾的函數
@@ -69,8 +69,11 @@ class FlowErrorHandler:
         Args:
             log_entity (FlowLog): 日誌實體。
         """
+        if cls.task_name == "notice_job_success":
+            log_entity.SEVERITY = "DEBUG"
+        else:
+            log_entity.SEVERITY = "INFO"
         log_entity.STATUS = "Success"
-        log_entity.SEVERITY = "INFO"
         log_entity.TASK_CODE = cls.task_code_maker(
             executor=cls.executor,
             task_name=log_entity.TASK_NAME,

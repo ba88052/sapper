@@ -161,3 +161,10 @@ class SapperApplicationService:
                 report_message=self.report_message,
             )
         )
+    
+    @FlowErrorHandler.flow_log_decorator
+    def notice_job_success(self):
+        """
+        單純用來讓error_handling傳一個job完成的log
+        """
+        pass
