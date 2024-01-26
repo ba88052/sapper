@@ -59,4 +59,8 @@ class DomainRespositoryAdapter(DomainInfraPort):
         log_name = "custom-log"
         logger = logging_client.logger(log_name)
         flow_log_dict = vars(flow_log_entity)
+        severity=flow_log_entity.SEVERITY
+        # 在發log時沒有NOTICE這個層級，但組內有制定NOTICE層級，所以轉成DEBUG出去，這是一個有點蠢的動作。
+        if severity == "NOTICE":
+            severity= "DEBUG"
         logger.log_struct(flow_log_dict, severity=flow_log_entity.SEVERITY)

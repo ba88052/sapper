@@ -1,16 +1,16 @@
 {
     "bigquery": {
-        "project_name": "cdcda-lab-377808",
+        "project_name": "vn-loancloudmvp-data",
         "log":{
-            "dataset_name": "SAM_LAB",
-            "flow_log_table_name": "FLOW_LOG_test_0103"
+            "dataset_name": "LOG_DATASET",
+            "flow_log_table_name": "FLOW_LOG"
         }
     },
     "pubsub": {
-        "project_name": "cdcda-lab-377808"
+        "project_name": "vn-loancloudmvp-data"
     },
     "gcs": {
-        "project_name": "cdcda-lab-377808",
-        "bucket_name": "cdcda_sam"
+        "project_name": "vn-loancloudmvp-data",
+        "bucket_name": ""
     }
 }

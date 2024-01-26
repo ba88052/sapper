@@ -70,7 +70,7 @@ class FlowErrorHandler:
             log_entity (FlowLog): 日誌實體。
         """
         if cls.task_name == "notice_job_success":
-            log_entity.SEVERITY = "DEBUG"
+            log_entity.SEVERITY = "NOTICE"
         else:
             log_entity.SEVERITY = "INFO"
         log_entity.STATUS = "Success"
