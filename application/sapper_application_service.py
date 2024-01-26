@@ -75,6 +75,10 @@ class SapperApplicationService:
         # 回報任務狀態
         self.report_job()
 
+        # Task 6
+        # 存 notice job_success_log
+        self.notice_job_success()
+
     @FlowErrorHandler.flow_log_decorator
     def select_job(self):
         """
