@@ -25,7 +25,7 @@
             "generator_next_job_command":"03",
             "save_next_job_status_log":"04",
             "send_next_job_command":"05",
-            "report_mission_success":"06"
+            "report_mission_status":"06"
             }
         },
     "severity_mapping":{
