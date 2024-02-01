@@ -11,7 +11,7 @@ class DomainInfraPort:
         """
         return NotImplementedError
 
-    def customize_select_from_source_table(self, source_table_path, conditions):
+    def customize_select_from_source_table(self, source_table_path, conditions=None):
         """
         客製化查詢source_table
 

@@ -26,7 +26,10 @@ class CustomizeSelect(Job):
             list: 回傳資料
         """
         conditions = []
-        conditions_list = order_data["select_conditions"]
+        try:
+            conditions_list = order_data["select_conditions"]
+        except:
+            conditions_list = None
         for condition in conditions_list:
             conditions.append(condition.format(**locals()))
         result_data_list = self.infra_respository.customize_select_from_source_table(
