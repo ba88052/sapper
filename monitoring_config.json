@@ -11,7 +11,7 @@
             "add_shared_data":"03",
             "save_data":"04",
             "report_job":"05",
-            "notice_job_success":"06"
+            "notice_job_success":"11"
             },
         "sapper":{
             "select_job":"01",
@@ -19,7 +19,7 @@
             "add_shared_data":"03",
             "save_data":"04",
             "report_job":"05",
-            "notice_job_success":"06"
+            "notice_job_success":"11"
             },
         "liaison":{
             "get_mission_process_config_data":"01",
@@ -28,7 +28,7 @@
             "save_next_job_status_log":"04",
             "send_next_job_command":"05",
             "report_mission_status":"06",
-            "notice_job_success":"07"
+            "notice_job_success":"11"
             }
         },
     "severity_mapping":{
