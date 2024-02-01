@@ -11,6 +11,6 @@
     },
     "gcs": {
         "project_name": "vn-loancloudmvp-data",
-        "bucket_name": ""
+        "bucket_name": "cdcda_sam"
     }
 }
