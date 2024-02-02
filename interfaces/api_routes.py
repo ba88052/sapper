@@ -39,7 +39,8 @@ def execute_collect_mission():
             domain_infra_respository=g.DOMAIN_INFRA_ADAPTER,
         ).execute()
         return make_response((f"success", 204))
-    except:
+    except Exception as e:
+        print("error", e)
         return make_response((f"fail", 204))
 
 
