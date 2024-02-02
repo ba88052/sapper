@@ -28,13 +28,15 @@ class CustomizeSelect(Job):
         conditions = []
         try:
             conditions_list = order_data["select_conditions"]
+            for condition in conditions_list:
+                conditions.append(condition.format(**locals()))
+            result_data_list = self.infra_respository.customize_select_from_source_table(
+                source_table_path=source_table_path, conditions=conditions
+            )
         except:
-            conditions_list = None
-        for condition in conditions_list:
-            conditions.append(condition.format(**locals()))
-        result_data_list = self.infra_respository.customize_select_from_source_table(
-            source_table_path=source_table_path, conditions=conditions
-        )
+            result_data_list = self.infra_respository.customize_select_from_source_table(
+                source_table_path=source_table_path
+            )
         convert_data_list = []
         for result_data in result_data_list:
             convert_data_list.append(self.__convert_all_to_str(result_data))
