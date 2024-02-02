@@ -41,7 +41,7 @@ class FuzzyComparison(Job):
         for tmp_table_data in tmp_table_data_list:
             tmp_data_list = tmp_table_data["TMP_DATA"]
             tmp_data_list_converted = json.loads(tmp_data_list)
-            tmp_data = tmp_data_list_converted[0]
+            tmp_data = tmp_data_list_converted
             closest_matches = self.__find_closest_matches(match_target=match_target, data_dicts=tmp_data, comparison_column=comparison_column)
             closest_matches_list.append(closest_matches)
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=closest_matches_list)
