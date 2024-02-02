@@ -60,7 +60,7 @@ class FuzzyComparison(Job):
         Returns:
             list of tuples: 包含最接近匹配項及其分數的列表。
         """
-        print(data_dicts)
+        print("data_dicts:", data_dicts)
         column_data = [row[comparison_column] for row in data_dicts if comparison_column in row]
         closest_matches = self.__fuzzy_match(match_target, column_data, n=n)
         return closest_matches
