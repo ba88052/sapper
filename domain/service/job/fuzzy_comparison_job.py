@@ -3,7 +3,9 @@ import json
 
 from domain.domain_infra_port import DomainInfraPort
 from domain.entity.general_tmp_data_entity import GeneralTmpData
+from domain.entity.fuzzy_comparison_result_entity import FuzzyComparisonResult
 from domain.service.job.job import Job
+
 
 class FuzzyComparison(Job):
     def __init__(self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()):
@@ -44,6 +46,8 @@ class FuzzyComparison(Job):
             tmp_data = tmp_data_list_converted
             closest_matches = self.__find_closest_matches(match_target=match_target, data_dicts=tmp_data, comparison_column=comparison_column)
             closest_matches_list.append(closest_matches)
+            print("closest_matches", closest_matches)
+            print("closest_matches_list", closest_matches_list)
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=closest_matches_list)
         return general_tmp_data_entity
 

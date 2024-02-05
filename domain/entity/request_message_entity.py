@@ -32,8 +32,6 @@ class RequestMessage:
             DESTINATION_TABLE_PATH (str, 可選): 指向目標數據表位置的字串。
             JOB_STATUS (str, 可選): 描述當前任務狀態的字串。
             USE_GENERAL_TEMP_TABLE (str, 可選): 是否使用通用臨時表的字串。
-            BQ_CREATED_TIME (datetime, 可選): 物件在 BigQuery 中的建立時間，預設為當前時間。
-            BQ_UPDATED_TIME (datetime, 可選): 物件在 BigQuery 中的最後更新時間，預設為當前時間。
         """
         self.ORDER_DATA = ORDER_DATA
         self.MISSION_NAME = MISSION_NAME
