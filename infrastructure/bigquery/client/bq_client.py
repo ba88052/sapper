@@ -2,7 +2,6 @@ import json
 
 from google.cloud import bigquery
 
-from infrastructure.config_handler import INFRA_CONFIG
 
 
 class BqClient:
@@ -11,6 +10,8 @@ class BqClient:
     """
 
     def __init__(self):
+        # 避免循環import
+        from infrastructure.config_handler import INFRA_CONFIG
         self.project = INFRA_CONFIG["bigquery"]["project_name"]
         self.client = bigquery.Client(self.project)
 
