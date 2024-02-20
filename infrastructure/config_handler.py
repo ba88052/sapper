@@ -1,4 +1,5 @@
 # config_handler.py
+from infrastructure.bigquery.repository.config_handler_repository  import ConfigHandlerRepository
 import json
 
 
@@ -18,7 +19,7 @@ def load_monitoring_config():
     dataset_name = INFRA_CONFIG["bigquery"]["config"]["dataset_name"]
     monitoring_parameter_table_name = INFRA_CONFIG["bigquery"]["config"]["monitoring_parameter_table_name"]
     table_path = f"{dataset_name}.{monitoring_parameter_table_name}"
-    config = INFRA_CONFIG(table_path).extract_last_config("PARAMETER")
+    config = ConfigHandlerRepository(table_path).extract_last_config("PARAMETER")
     return config
     # with open("./monitoring_config.json", "r") as file:
     #     return json.load(file)
