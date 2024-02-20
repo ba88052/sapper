@@ -4,6 +4,10 @@
         "log":{
             "dataset_name": "LOG_DATASET",
             "flow_log_table_name": "FLOW_LOG"
+        },
+        "config":{
+            "dataset_name": "EDEP_DATA_TRANSFORMER_DATASET",
+            "monitoring_parameter_table_name":"MONITORING_PARAMETER"
         }
     },
     "pubsub": {
