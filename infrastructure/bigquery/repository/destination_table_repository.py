@@ -114,7 +114,7 @@ class DestinationTableRepository(BqClient):
         bq_created_time_str = bq_created_time_utc.isoformat()
         bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        partition_date = bq_created_time.strftime("%Y-%m-%dT")
+        partition_date = bq_created_time.strftime("%Y-%m-%d")
         general_tmp_data_entity.BQ_CREATED_TIME = bq_created_time_str
         general_tmp_data_entity.BQ_UPDATED_TIME = bq_updated_time_str
         general_tmp_data_entity.PARTITION_DATE = partition_date
