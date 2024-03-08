@@ -1,3 +1,5 @@
+import traceback
+
 from flask import g
 
 from application.application_infra_port import ApplicationInfraPort
@@ -54,32 +56,38 @@ class SapperApplicationService:
         """
         根據傳入的job_name和order_data執行子任務
         """
-        #  Task 1
-        #  根據 job_name 選擇子任務 job
-        job = self.select_job()
+        try:
+            #  Task 1
+            #  根據 job_name 選擇子任務 job
+            job = self.select_job()
 
-        # Task 2
-        # 將 order_data 丟入 job 中執行任務
-        general_tmp_data_entity = self.run_job(job)
+            # Task 2
+            # 將 order_data 丟入 job 中執行任務
+            general_tmp_data_entity = self.run_job(job)
 
-        # Task 3
-        # 加入一些通用資料
-        self.add_shared_data(general_tmp_data_entity=general_tmp_data_entity)
+            # Task 3
+            # 加入一些通用資料
+            self.add_shared_data(general_tmp_data_entity=general_tmp_data_entity)
 
-        # Task 4
-        # 存入資料庫
-        self.save_data(general_tmp_data_entity=general_tmp_data_entity)
-        self.report_message["order_data"]["transformer_data"] = general_tmp_data_entity.TMP_DATA
-        self.report_message["job_status"] = "Success"
-        print(self.report_message)
+            # Task 4
+            # 存入資料庫
+            self.save_data(general_tmp_data_entity=general_tmp_data_entity)
+            self.report_message["order_data"]["transformer_data"] = general_tmp_data_entity.TMP_DATA
+            self.report_message["job_status"] = "Success"
+            print(self.report_message)
 
-        # Task 5
-        # 回報任務狀態
-        self.report_job()
+            # Task 5
+            # 回報任務狀態
+            self.report_job()
 
-        # Task 6
-        # 存 notice job_success_log
-        self.notice_job_success()
+            # Task 6
+            # 存 notice job_success_log
+            self.notice_job_success()
+
+        except Exception as e:
+            error_info = str(e) + traceback.format_exc()
+            error_info = error_info.replace("\n", "")
+            print("ERROR_INFO:", error_info)
 
     @FlowErrorHandler.flow_log_decorator
     def select_job(self):
