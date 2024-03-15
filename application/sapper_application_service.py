@@ -147,20 +147,23 @@ class SapperApplicationService:
         general_tmp_data_entity.JOB_ID = self.request_message_entity.JOB_ID
 
     @FlowErrorHandler.flow_log_decorator
-    def save_data(self, general_tmp_data_entity):
+    def save_data(self, general_tmp_data_entity_list):
         """
         將臨時數據保存到數據庫。
 
         將臨時數據實體存儲到目標表路徑(DESTINATION_TABLE_PATH)並更新報告消息的狀態。
 
         Args:
-            general_tmp_data_entity (Object): 臨時數據實體。
+            general_tmp_data_entity_list (Object): 臨時數據實體（有可能是list）。
         """
-        self.application_infra_respository.save_general_tmp_data(
-            destination_table_path=self.request_message_entity.DESTINATION_TABLE_PATH,
-            general_tmp_data_entity=general_tmp_data_entity,
-            use_tmp_table=self.request_message_entity.USE_GENERAL_TMP_TABLE,
-        )
+        if not isinstance(general_tmp_data_entity_list, list):
+            general_tmp_data_entity_list = [general_tmp_data_entity_list]
+        for general_tmp_data_entity in general_tmp_data_entity_list:
+            self.application_infra_respository.save_general_tmp_data(
+                destination_table_path=self.request_message_entity.DESTINATION_TABLE_PATH,
+                general_tmp_data_entity=general_tmp_data_entity,
+                use_tmp_table=self.request_message_entity.USE_GENERAL_TMP_TABLE,
+            )
 
     @FlowErrorHandler.flow_log_decorator
     def report_job(self):

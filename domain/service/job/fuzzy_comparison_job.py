@@ -78,14 +78,14 @@ class FuzzyComparison(Job):
         closest_matches = self.__fuzzy_match(match_target, column_data, n=n)
         return closest_matches
 
-    def __fuzzy_match(self, match_target, column_data, n=3):
+    def __fuzzy_match(self, match_target, column_data, n):
         """
         使用 difflib 對一列數據進行模糊比對，並計算匹配分數。
 
         Args:
             match_target (str): 要進行比對的目標字符串。
             column_data (list of str): 要進行比對的數據列。
-            n (int, optional): 要返回的最接近匹配項的數量。預設為 3。
+            n (int, optional): 要返回的最接近匹配項的數量。
 
         Returns:
             list of tuples: 包含最接近匹配項及其分數的列表。
