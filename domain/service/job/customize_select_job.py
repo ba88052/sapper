@@ -44,7 +44,7 @@ class CustomizeSelect(Job):
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=convert_data_list_json)
         print("list", convert_data_list_json)
         print("CustomizeSelect.entity", general_tmp_data_entity.TMP_DATA)
-        return general_tmp_data_entity
+        return general_tmp_data_entity, ""
 
     def __convert_all_to_str(self, data):
         if isinstance(data, dict):

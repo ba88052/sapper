@@ -23,5 +23,11 @@ class JobSelectorDomainService:
                 mission_name=mission_name,
                 domain_infra_respository=domain_infra_respository,
             )
+        elif job_name == "update_checklist_table_for_anonymization":
+            return FuzzyComparison(
+                mission_id=mission_id,
+                mission_name=mission_name,
+                domain_infra_respository=domain_infra_respository,
+            )
         else:
             raise ValueError(f"Mission is not defind.")

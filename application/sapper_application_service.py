@@ -63,7 +63,7 @@ class SapperApplicationService:
 
             # Task 2
             # 將 order_data 丟入 job 中執行任務
-            general_tmp_data_entity = self.run_job(job)
+            general_tmp_data_entity, return_message = self.run_job(job)
 
             # Task 3
             # 加入一些通用資料
@@ -72,7 +72,8 @@ class SapperApplicationService:
             # Task 4
             # 存入資料庫
             self.save_data(general_tmp_data_entity=general_tmp_data_entity)
-            self.report_message["order_data"]["transformer_data"] = general_tmp_data_entity.TMP_DATA
+            if return_message != "":
+                self.report_message["order_data"]["sapper_job_result"] = return_message
             self.report_message["job_status"] = "Success"
             print(self.report_message)
 

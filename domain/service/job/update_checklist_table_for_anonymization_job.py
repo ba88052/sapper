@@ -26,6 +26,7 @@ class UpdateCheckListTableJob(Job):
         """
         # 解析 dataset_name 和 table_name
         dataset_name, table_name = source_table_path.split('.')
+        table_name = self.__remove_prefix(table_name, "TMP_")
         current_time = datetime.now().isoformat()
         
         # 準備更新到 check_list 表的資料
@@ -40,4 +41,9 @@ class UpdateCheckListTableJob(Job):
         update_data_json = json.dumps(update_data)
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=update_data_json)
         print("UpdateCheckListTableJob.entity", general_tmp_data_entity.TMP_DATA)
-        return general_tmp_data_entity
+        return general_tmp_data_entity, ""
+
+    def __remove_prefix(self, text, prefix):
+        if text.startswith(prefix):
+            return text[len(prefix):]
+        return text  # 如果不是以指定的前綴開頭，則返回原文本

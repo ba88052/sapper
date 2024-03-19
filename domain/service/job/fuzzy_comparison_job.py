@@ -56,9 +56,11 @@ class FuzzyComparison(Job):
                     "SCORE":closest_matches[1]
                 }
                 fuzzy_comparison_result_dict_list.append(fuzzy_comparison_result_dict)
-            print (fuzzy_comparison_result_dict_list)
+            print("fuzzy_comparison_result_dict_list", fuzzy_comparison_result_dict_list)
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=fuzzy_comparison_result_dict_list)
-        return general_tmp_data_entity
+        closest_match_data = next((item for item in tmp_data if item[comparison_column] == closest_matches_list[0][0]), None)
+        print("closest_match_data", closest_match_data)
+        return general_tmp_data_entity, closest_match_data
 
     def __find_closest_matches(self, match_target, data_dicts, comparison_column, n=100):
         """
