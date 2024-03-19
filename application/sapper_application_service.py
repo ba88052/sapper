@@ -63,15 +63,15 @@ class SapperApplicationService:
 
             # Task 2
             # 將 order_data 丟入 job 中執行任務
-            general_tmp_data_entity, return_message = self.run_job(job)
+            general_tmp_data_entity_list, return_message = self.run_job(job)
 
             # Task 3
             # 加入一些通用資料
-            self.add_shared_data(general_tmp_data_entity=general_tmp_data_entity)
+            self.add_shared_data(general_tmp_data_entity_list=general_tmp_data_entity_list)
 
             # Task 4
             # 存入資料庫
-            self.save_data(general_tmp_data_entity=general_tmp_data_entity)
+            self.save_data(general_tmp_data_entity_list=general_tmp_data_entity_list)
             if return_message != "":
                 self.report_message["order_data"]["sapper_job_result"] = return_message
             self.report_message["job_status"] = "Success"
@@ -123,16 +123,16 @@ class SapperApplicationService:
         Returns:
             Object: 執行工作後生成的臨時數據實體。
         """
-        general_tmp_data_entity, return_message = job.execute(
+        general_tmp_data_entity_list, return_message = job.execute(
             order_data=self.request_message_entity.ORDER_DATA,
             source_table_path=self.request_message_entity.SOURCE_TABLE_PATH,
             previous_job_id=self.request_message_entity.PREVIOUS_JOB_ID,
         )
-        print(general_tmp_data_entity.TMP_DATA)
-        return general_tmp_data_entity, return_message
+        # print(general_tmp_data_entity.TMP_DATA)
+        return general_tmp_data_entity_list, return_message
 
     @FlowErrorHandler.flow_log_decorator
-    def add_shared_data(self, general_tmp_data_entity):
+    def add_shared_data(self, general_tmp_data_entity_list):
         """
         為臨時數據實體添加共用數據。
 
@@ -142,10 +142,13 @@ class SapperApplicationService:
         Args:
             general_tmp_data_entity (Object): 臨時數據實體。
         """
-        general_tmp_data_entity.UUID_Request = self.request_message_entity.MISSION_ID
-        general_tmp_data_entity.MISSION_NAME = self.request_message_entity.MISSION_NAME
-        general_tmp_data_entity.JOB_NAME = self.request_message_entity.JOB_NAME
-        general_tmp_data_entity.JOB_ID = self.request_message_entity.JOB_ID
+        if not isinstance(general_tmp_data_entity_list, list):
+            general_tmp_data_entity_list = [general_tmp_data_entity_list]
+        for general_tmp_data_entity in general_tmp_data_entity_list:
+            general_tmp_data_entity.UUID_Request = self.request_message_entity.MISSION_ID
+            general_tmp_data_entity.MISSION_NAME = self.request_message_entity.MISSION_NAME
+            general_tmp_data_entity.JOB_NAME = self.request_message_entity.JOB_NAME
+            general_tmp_data_entity.JOB_ID = self.request_message_entity.JOB_ID
 
     @FlowErrorHandler.flow_log_decorator
     def save_data(self, general_tmp_data_entity_list):
