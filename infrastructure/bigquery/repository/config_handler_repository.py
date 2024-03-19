@@ -36,6 +36,6 @@ class ConfigHandlerRepository(BqClient):
         result_data = self.run_query(query)
         # 由於僅返回最新一條記錄，因此直接處理單個結果，如果查詢結果為空，則返回空字典
         extracted_data = json.loads(result_data[0][field_name]) if result_data else None
-        print(extracted_data)
+        # print(extracted_data)
 
         return extracted_data

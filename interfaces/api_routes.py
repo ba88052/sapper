@@ -1,3 +1,4 @@
+import traceback
 import base64
 import json
 
@@ -40,7 +41,9 @@ def execute_collect_mission():
         ).execute()
         return make_response((f"success", 204))
     except Exception as e:
-        print("error", e)
+        error_info = str(e) + traceback.format_exc()
+        error_info = error_info.replace("\n", "")
+        print("ERROR_INFO:", error_info)
         return make_response((f"fail", 204))
 
 
