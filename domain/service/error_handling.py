@@ -33,7 +33,7 @@ class FlowErrorHandler:
 
             # 記錄當前時間
             current_time = datetime.now()
-            current_time_str = current_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+            current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S.%f")
             cls.task_name = func.__name__
             flow_log_entity = FlowLog(
                 DATETIME=current_time_str,
