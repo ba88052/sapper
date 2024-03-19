@@ -86,10 +86,10 @@ class DestinationTableRepository(BqClient):
         bq_created_time = datetime.now()
         bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        partition_date = bq_created_time.strftime("%Y-%m-%d")
         destination_data["BQ_CREATED_TIME"] = bq_created_time_str
         destination_data["BQ_UPDATED_TIME"] = bq_updated_time_str
-        print(destination_data)
-        print(bq_created_time_str)
+        destination_data["PARTITION_DATA"] = partition_date
         schema_field_names = self.__get_table_schema(table_id)
         filled_data = {}
         for field in schema_field_names:
