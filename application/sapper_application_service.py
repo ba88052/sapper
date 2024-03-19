@@ -123,13 +123,13 @@ class SapperApplicationService:
         Returns:
             Object: 執行工作後生成的臨時數據實體。
         """
-        general_tmp_data_entity = job.execute(
+        general_tmp_data_entity, return_message = job.execute(
             order_data=self.request_message_entity.ORDER_DATA,
             source_table_path=self.request_message_entity.SOURCE_TABLE_PATH,
             previous_job_id=self.request_message_entity.PREVIOUS_JOB_ID,
         )
         print(general_tmp_data_entity.TMP_DATA)
-        return general_tmp_data_entity
+        return general_tmp_data_entity, return_message
 
     @FlowErrorHandler.flow_log_decorator
     def add_shared_data(self, general_tmp_data_entity):
