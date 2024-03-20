@@ -38,8 +38,8 @@ class UpdateCheckListTableJob(Job):
         }
 
         # 轉換更新資料為JSON格式並封裝到GeneralTmpData中
-        update_data_json = json.dumps(update_data)
-        update_data_json_list = [update_data_json]
+        # update_data_json = json.dumps(update_data)
+        update_data_json_list = [update_data]
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=update_data_json_list)
         print("UpdateCheckListTableJob.entity", general_tmp_data_entity.TMP_DATA)
         return general_tmp_data_entity, ""
