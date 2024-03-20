@@ -1,6 +1,7 @@
 from domain.service.job.customize_select_job import CustomizeSelect
 from domain.service.job.flatten_json_job import FlattenJson
 from domain.service.job.fuzzy_comparison_job import FuzzyComparison
+from domain.service.job.update_checklist_table_for_anonymization_job import UpdateCheckListTableJob
 
 
 class JobSelectorDomainService:
@@ -24,7 +25,7 @@ class JobSelectorDomainService:
                 domain_infra_respository=domain_infra_respository,
             )
         elif job_name == "update_checklist_table_for_anonymization":
-            return FuzzyComparison(
+            return UpdateCheckListTableJob(
                 mission_id=mission_id,
                 mission_name=mission_name,
                 domain_infra_respository=domain_infra_respository,
