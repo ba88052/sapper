@@ -36,8 +36,8 @@ def execute_collect_mission():
         order_dict = get_pubsub_message()
         SapperApplicationService(
             message=order_dict,
-            application_infra_respository=g.APPLICATION_INFRA_ADAPTOR,
-            domain_infra_respository=g.DOMAIN_INFRA_ADAPTER,
+            application_infra_repository=g.APPLICATION_INFRA_ADAPTOR,
+            domain_infra_repository=g.DOMAIN_INFRA_ADAPTER,
         ).execute()
         return make_response((f"success", 204))
     except Exception as e:

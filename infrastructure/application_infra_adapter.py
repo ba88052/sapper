@@ -5,7 +5,7 @@ from infrastructure.pubsub.repository.report_job_completed_repository import \
     ReportJobCompletedRepository
 
 
-class ApplicationRespositoryAdapter(ApplicationInfraPort):
+class ApplicationrepositoryAdapter(ApplicationInfraPort):
     def __init__(self):
         pass
 

@@ -8,11 +8,11 @@ from domain.service.job.job import Job
 
 class CustomizeSelect(Job):
     def __init__(
-        self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()
+        self, mission_id, mission_name, domain_infra_repository=DomainInfraPort()
     ):
         self.mission_id = mission_id
         self.mission_name = mission_name
-        self.infra_respository = domain_infra_respository
+        self.infra_repository = domain_infra_repository
 
     def execute(self, order_data, source_table_path, previous_job_id):
         """
@@ -30,11 +30,11 @@ class CustomizeSelect(Job):
             conditions_list = order_data["select_conditions"]
             for condition in conditions_list:
                 conditions.append(condition.format(**locals()))
-            result_data_list = self.infra_respository.customize_select_from_source_table(
+            result_data_list = self.infra_repository.customize_select_from_source_table(
                 source_table_path=source_table_path, conditions=conditions
             )
         except:
-            result_data_list = self.infra_respository.customize_select_from_source_table(
+            result_data_list = self.infra_repository.customize_select_from_source_table(
                 source_table_path=source_table_path
             )
         convert_data_list = []

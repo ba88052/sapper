@@ -8,18 +8,18 @@ from domain.service.job.job import Job
 
 
 class FuzzyComparison(Job):
-    def __init__(self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()):
+    def __init__(self, mission_id, mission_name, domain_infra_repository=DomainInfraPort()):
         """
         初始化 FuzzyComparison 類別。
 
         Args:
             mission_id (str): 任務 ID。
             mission_name (str): 任務名稱。
-            domain_infra_respository (DomainInfraPort): 領域基礎設施存儲庫實例。
+            domain_infra_repository (DomainInfraPort): 領域基礎設施存儲庫實例。
         """
         self.mission_id = mission_id
         self.mission_name = mission_name
-        self.infra_respository = domain_infra_respository
+        self.infra_repository = domain_infra_repository
 
     def execute(self, order_data, source_table_path, previous_job_id):
         """
@@ -33,7 +33,7 @@ class FuzzyComparison(Job):
         Returns:
             GeneralTmpData: 包含最接近匹配項的臨時數據實體。
         """
-        tmp_table_data_list = self.infra_respository.get_general_tmp_table_data(
+        tmp_table_data_list = self.infra_repository.get_general_tmp_table_data(
             source_table_path=source_table_path, previous_job_id=previous_job_id
         )
         match_target = order_data["match_target"]

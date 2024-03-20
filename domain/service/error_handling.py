@@ -6,7 +6,7 @@ from flask import g
 from domain.domain_infra_port import DomainInfraPort
 from domain.entity.flow_log_entity import FlowLog
 
-# 需要在被裝飾的函數中有包含 self.request_message_entity 和 self.domain_infra_respository
+# 需要在被裝飾的函數中有包含 self.request_message_entity 和 self.domain_infra_repository
 
 
 class FlowErrorHandler:
@@ -28,8 +28,8 @@ class FlowErrorHandler:
                 f"{service_instance.mission_name}_{service_instance.job_name}"
             )
             cls.executor = service_instance.executor
-            cls.infra_respository = service_instance.domain_infra_respository
-            cls.monitoring_config = cls.infra_respository.get_monitoring_config()
+            cls.infra_repository = service_instance.domain_infra_repository
+            cls.monitoring_config = cls.infra_repository.get_monitoring_config()
 
             # 記錄當前時間
             current_time = datetime.now()
@@ -79,7 +79,7 @@ class FlowErrorHandler:
             task_name=log_entity.TASK_NAME,
             severity=log_entity.SEVERITY,
         )
-        cls.infra_respository.save_flow_log(log_entity)
+        cls.infra_repository.save_flow_log(log_entity)
 
     @classmethod
     def flow_log_on_fail(cls, log_entity, error, severity):
@@ -99,7 +99,7 @@ class FlowErrorHandler:
             task_name=log_entity.TASK_NAME,
             severity=log_entity.SEVERITY,
         )
-        cls.infra_respository.save_flow_log(log_entity)
+        cls.infra_repository.save_flow_log(log_entity)
 
     @classmethod
     def task_code_maker(cls, executor, task_name, severity):

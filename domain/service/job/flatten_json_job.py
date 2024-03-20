@@ -7,18 +7,18 @@ from domain.service.job.job import Job
 
 class FlattenJson(Job):
     def __init__(
-        self, mission_id, mission_name, domain_infra_respository=DomainInfraPort()
+        self, mission_id, mission_name, domain_infra_repository=DomainInfraPort()
     ):
         self.mission_id = mission_id
         self.mission_name = mission_name
-        self.infra_respository = domain_infra_respository
+        self.infra_repository = domain_infra_repository
 
     def execute(self, order_data, source_table_path, previous_job_id):
         """
         將巢狀Json轉換為扁平字典。
         """
         flatten_json_data_list = []
-        tmp_table_data_list = self.infra_respository.get_general_tmp_table_data(
+        tmp_table_data_list = self.infra_repository.get_general_tmp_table_data(
             source_table_path=source_table_path, previous_job_id=previous_job_id
         )
         for tmp_table_data in tmp_table_data_list:

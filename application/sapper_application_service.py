@@ -13,16 +13,16 @@ class SapperApplicationService:
     def __init__(
         self,
         message,
-        application_infra_respository=ApplicationInfraPort(),
-        domain_infra_respository=DomainInfraPort(),
+        application_infra_repository=ApplicationInfraPort(),
+        domain_infra_repository=DomainInfraPort(),
     ):
         """
         初始化 SapperApplicationService 類。
 
         Args:
             message (dict): 包含工作流程所需信息的字典。
-            application_infra_respository (ApplicationInfraPort): 應用程式基礎設施儲存庫。
-            domain_infra_respository (DomainInfraPort): 領域基礎設施儲存庫。
+            application_infra_repository (ApplicationInfraPort): 應用程式基礎設施儲存庫。
+            domain_infra_repository (DomainInfraPort): 領域基礎設施儲存庫。
         """
         # 解析消息並創建 RequestMessage 實體
         self.request_message_entity = RequestMessage(
@@ -48,8 +48,8 @@ class SapperApplicationService:
         self.report_message = message
         self.report_message["job_status"] = "Process"
         self.report_message["note"] = ""
-        self.application_infra_respository = application_infra_respository
-        self.domain_infra_respository = domain_infra_respository
+        self.application_infra_repository = application_infra_repository
+        self.domain_infra_repository = domain_infra_repository
         self.job_selector = JobSelectorDomainService()
 
     def execute(self):
@@ -105,7 +105,7 @@ class SapperApplicationService:
             job_name=self.request_message_entity.JOB_NAME,
             mission_id=self.request_message_entity.MISSION_ID,
             mission_name=self.request_message_entity.MISSION_NAME,
-            domain_infra_respository=self.domain_infra_respository,
+            domain_infra_repository=self.domain_infra_repository,
         )
         return job
 
@@ -163,7 +163,7 @@ class SapperApplicationService:
         if not isinstance(general_tmp_data_entity_list, list):
             general_tmp_data_entity_list = [general_tmp_data_entity_list]
         for general_tmp_data_entity in general_tmp_data_entity_list:
-            self.application_infra_respository.save_general_tmp_data(
+            self.application_infra_repository.save_general_tmp_data(
                 destination_table_path=self.request_message_entity.DESTINATION_TABLE_PATH,
                 general_tmp_data_entity=general_tmp_data_entity,
                 use_tmp_table=self.request_message_entity.USE_GENERAL_TMP_TABLE,
@@ -177,7 +177,7 @@ class SapperApplicationService:
         將工作完成的狀態和其他相關信息傳遞給應用程式基礎設施儲存庫以進行記錄和後續處理。
         """
         print(
-            self.application_infra_respository.report_job_completed(
+            self.application_infra_repository.report_job_completed(
                 report_return_path=self.request_message_entity.REPORT_PATH,
                 report_message=self.report_message,
             )

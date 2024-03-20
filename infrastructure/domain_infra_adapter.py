@@ -2,14 +2,14 @@ import json
 from google.cloud import logging
 
 from domain.domain_infra_port import DomainInfraPort
-from infrastructure.bigquery.repository.flow_log_respository import \
+from infrastructure.bigquery.repository.flow_log_repository import \
     FLowLogRepository
 from infrastructure.bigquery.repository.source_table_repository import \
     SourceTableRepository
 from infrastructure.config_handler import INFRA_CONFIG, MONITORING_CONFIG
 
 
-class DomainRespositoryAdapter(DomainInfraPort):
+class DomainrepositoryAdapter(DomainInfraPort):
     def __init__(self):
         self.config_file = "config.json"
 
