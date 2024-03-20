@@ -2,8 +2,7 @@ import os
 
 from flask import Flask, g, request
 
-from infrastructure.application_infra_adapter import \
-    ApplicationRepositoryAdapter
+from infrastructure.application_infra_adapter import ApplicationRepositoryAdapter
 from infrastructure.domain_infra_adapter import DomainRepositoryAdapter
 from interfaces import api_routes
 

@@ -9,7 +9,7 @@ from infrastructure.bigquery.repository.source_table_repository import \
 from infrastructure.config_handler import INFRA_CONFIG, MONITORING_CONFIG
 
 
-class DomainrepositoryAdapter(DomainInfraPort):
+class DomainRepositoryAdapter(DomainInfraPort):
     def __init__(self):
         self.config_file = "config.json"
 
