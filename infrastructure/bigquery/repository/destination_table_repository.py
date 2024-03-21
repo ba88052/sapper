@@ -84,8 +84,8 @@ class DestinationTableRepository(BqClient):
         """
 
         bq_created_time = datetime.now()
-        bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
         partition_date = bq_created_time.strftime("%Y-%m-%d")
         destination_data["BQ_CREATED_TIME"] = bq_created_time_str
         destination_data["BQ_UPDATED_TIME"] = bq_updated_time_str
@@ -112,8 +112,8 @@ class DestinationTableRepository(BqClient):
         bq_created_time = datetime.now()
         bq_created_time_utc = bq_created_time.replace(tzinfo=timezone.utc)
         bq_created_time_str = bq_created_time_utc.isoformat()
-        bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-        bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+        bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
+        bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
         partition_date = bq_created_time.strftime("%Y-%m-%d")
         general_tmp_data_entity.BQ_CREATED_TIME = bq_created_time_str
         general_tmp_data_entity.BQ_UPDATED_TIME = bq_updated_time_str
