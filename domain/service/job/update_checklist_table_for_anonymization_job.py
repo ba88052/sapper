@@ -37,6 +37,10 @@ class UpdateCheckListTableJob(Job):
             "UPDATE_STATUS": 1
         }
 
+        #只是for anamization 使用，用於刪除check_list_summary中的動作，不使用時請刪除這段有點醜的程式
+        delete_sql = self.generate_delete_sql()
+        self.infra_repository.run_query(delete_sql)
+
         # 轉換更新資料為JSON格式並封裝到GeneralTmpData中
         # update_data_json = json.dumps(update_data)
         update_data_json_list = [update_data]
@@ -48,3 +52,29 @@ class UpdateCheckListTableJob(Job):
         if text.startswith(prefix):
             return text[len(prefix):]
         return text  # 如果不是以指定的前綴開頭，則返回原文本
+    
+
+    #只是for anamization 使用，不使用時請刪除這段有點醜的程式
+    def generate_delete_sql(self, dataset_name):
+        """
+        生成用於刪除符合特定條件記錄的 SQL 語句。
+
+        參數:
+            dataset_name (str): 需要匹配的 DATASET 值。
+            table_name (str): 目標表名。
+
+        返回:
+            str: 生成的 SQL 語句。
+        """
+        # 獲取今天的日期，格式為 YYYY-MM-DD
+        today_date = datetime.now().strftime("%Y-%m-%d")
+        
+        sql = f"""
+        DELETE FROM `"LOG_DATASET.OTHER_CHECKSUMMARY"`
+        WHERE BQ_DATE = '{today_date}'
+        AND DATASET = '{dataset_name}'
+        AND STATUS = 1
+        AND REMARK = 1
+        """
+        
+        return sql

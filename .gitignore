@@ -3,3 +3,5 @@ application/sapper_application_service copy.py
 .git_lab/
 .git_hub/
 .DS_Store
+.Pipfile
+.Pipfile.lock

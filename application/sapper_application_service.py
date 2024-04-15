@@ -20,7 +20,7 @@ class SapperApplicationService:
         初始化 SapperApplicationService 類。
 
         Args:
-            message (dict): 包含工作流程所需信息的字典。
+            message (dict): 請參考 request_message_entity
             application_infra_repository (ApplicationInfraPort): 應用程式基礎設施儲存庫。
             domain_infra_repository (DomainInfraPort): 領域基礎設施儲存庫。
         """
@@ -54,8 +54,15 @@ class SapperApplicationService:
 
     def execute(self):
         """
-        根據傳入的job_name和order_data執行子任務
+        此函數會按照順序執行
+        1. 根據 job_name 選擇子任務 job
+        2. 將 order_data 丟入 job 中執行任務
+        3. 加入一些通用資料
+        4. 存入資料庫
+        5. 回報任務狀態（主要是Liaison）
+        6. 發送 job 完成
         """
+        error_occurred = False
         try:
             #  Task 1
             #  根據 job_name 選擇子任務 job
@@ -77,18 +84,20 @@ class SapperApplicationService:
             self.report_message["job_status"] = "Success"
             print(self.report_message)
 
-            # Task 5
-            # 回報任務狀態
-            self.report_job()
-
-            # Task 6
-            # 存 notice job_success_log
-            self.notice_job_success()
-
         except Exception as e:
+            error_occurred = True
             error_info = str(e) + traceback.format_exc()
             error_info = error_info.replace("\n", "")
-            print("ERROR_INFO:", error_info)
+            self.report_message["job_status"] = "Fail"
+            # print("ERROR_INFO:", error_info)
+        
+        # Task 5
+        # 回報任務狀態
+        self.report_job()
+
+        if not error_occurred:
+            # Task 6 - 只有在沒有異常發生時才執行
+            self.notice_job_success()
 
     @FlowErrorHandler.flow_log_decorator
     def select_job(self):

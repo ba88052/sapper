@@ -35,3 +35,6 @@ class DomainInfraPort:
         存 flow_log ，還需要發送 logging 到對應服務中做紀錄
         """
         pass
+    
+    def run_query(self):
+        pass

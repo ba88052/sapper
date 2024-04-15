@@ -37,30 +37,38 @@ class FuzzyComparison(Job):
             source_table_path=source_table_path, previous_job_id=previous_job_id
         )
         match_target = order_data["match_target"]
+        # 確保 match_target 是一個列表
+        if not isinstance(match_target, list):
+            match_target = [match_target]
         comparison_column = order_data["comparison_column"]
         fuzzy_comparison_result_dict_list = []
+        closest_match_data_list = []
 
         for tmp_table_data in tmp_table_data_list:
             tmp_data_list = tmp_table_data["TMP_DATA"]
             tmp_data_list_converted = json.loads(tmp_data_list)
             tmp_data = tmp_data_list_converted
-            closest_matches_list = self.__find_closest_matches(match_target=match_target, data_dicts=tmp_data, comparison_column=comparison_column)
-            for closest_matches in closest_matches_list:
-                fuzzy_comparison_result_dict = {
-                    "UUID_Request":tmp_table_data["UUID_Request"],
-                    "MISSION_NAME":tmp_table_data["MISSION_NAME"],
-                    "JOB_ID":tmp_table_data["JOB_ID"],
-                    "JOB_NAME":tmp_table_data["JOB_NAME"],
-                    "MATCH_TARGET":match_target,
-                    "COLUMN_DATA":closest_matches[0],
-                    "SCORE":closest_matches[1]
-                }
-                fuzzy_comparison_result_dict_list.append(fuzzy_comparison_result_dict)
+            # 對 match_target 列表中的每個目標進行迭代處理
+            for target in match_target:
+                closest_matches_list = self.__find_closest_matches(match_target=target, data_dicts=tmp_data, comparison_column=comparison_column)
+                for closest_matches in closest_matches_list:
+                    fuzzy_comparison_result_dict = {
+                        "UUID_Request": tmp_table_data["UUID_Request"],
+                        "MISSION_NAME": tmp_table_data["MISSION_NAME"],
+                        "JOB_ID": tmp_table_data["JOB_ID"],
+                        "JOB_NAME": tmp_table_data["JOB_NAME"],
+                        "MATCH_TARGET": target,
+                        "COLUMN_DATA": closest_matches[0],
+                        "SCORE": closest_matches[1]
+                    }
+                    fuzzy_comparison_result_dict_list.append(fuzzy_comparison_result_dict)
+                closest_match_data = next((item for item in tmp_data if item[comparison_column] == closest_matches_list[0][0]), None)
+                closest_match_data_list.append(closest_match_data)
             print("fuzzy_comparison_result_dict_list", fuzzy_comparison_result_dict_list)
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=fuzzy_comparison_result_dict_list)
-        closest_match_data = next((item for item in tmp_data if item[comparison_column] == closest_matches_list[0][0]), None)
-        print("closest_match_data", closest_match_data)
-        return general_tmp_data_entity, closest_match_data
+        
+        print("closest_match_data_list", closest_match_data_list)
+        return general_tmp_data_entity, closest_match_data_list
 
     def __find_closest_matches(self, match_target, data_dicts, comparison_column, n=100):
         """

@@ -7,6 +7,8 @@ from infrastructure.bigquery.repository.flow_log_repository import \
 from infrastructure.bigquery.repository.source_table_repository import \
     SourceTableRepository
 from infrastructure.config_handler import INFRA_CONFIG, MONITORING_CONFIG
+# 只是for anamization 使用
+from infrastructure.bigquery.client.bq_client import BqClient
 
 
 class DomainRepositoryAdapter(DomainInfraPort):
@@ -61,6 +63,15 @@ class DomainRepositoryAdapter(DomainInfraPort):
         flow_log_dict = vars(flow_log_entity)
         severity=flow_log_entity.SEVERITY
         # 在發log時沒有NOTICE這個層級，但組內有制定NOTICE層級，所以轉成DEBUG出去，這是一個有點蠢的動作。
-        if severity == "NOTICE":
-            severity= "DEBUG"
-        logger.log_struct(flow_log_dict, severity=flow_log_entity.SEVERITY)
+        # if severity == "NOTICE":
+        #     severity= "DEBUG"
+        logger.log_struct(flow_log_dict, severity=severity)
+
+    def run_query(self, query):
+        """
+        只是for anamization 使用，不使用時請刪除這段有點醜的程式
+
+        Args:
+            query (_type_): _description_
+        """
+        BqClient().run_query(query=query)
