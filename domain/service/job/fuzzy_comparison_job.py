@@ -1,11 +1,10 @@
-import difflib
+from rapidfuzz import process, fuzz
 import json
 
 from domain.domain_infra_port import DomainInfraPort
 from domain.entity.general_tmp_data_entity import GeneralTmpData
 from domain.entity.fuzzy_comparison_result_entity import FuzzyComparisonResult
 from domain.service.job.job import Job
-
 
 class FuzzyComparison(Job):
     def __init__(self, mission_id, mission_name, domain_infra_repository=DomainInfraPort()):
@@ -36,27 +35,28 @@ class FuzzyComparison(Job):
         tmp_table_data_list = self.infra_repository.get_general_tmp_table_data(
             source_table_path=source_table_path, previous_job_id=previous_job_id
         )
-        match_target = order_data["match_target"]
+        
+        # 一次性解析所有数据，提高效率
+        tmp_data_converted = [json.loads(tmp_data["TMP_DATA"]) for tmp_data in tmp_table_data_list]
+        
         # 確保 match_target 是一個列表
+        match_target = order_data["match_target"]
         if not isinstance(match_target, list):
             match_target = [match_target]
         comparison_column = order_data["comparison_column"]
         fuzzy_comparison_result_dict_list = []
         closest_match_data_list = []
 
-        for tmp_table_data in tmp_table_data_list:
-            tmp_data_list = tmp_table_data["TMP_DATA"]
-            tmp_data_list_converted = json.loads(tmp_data_list)
-            tmp_data = tmp_data_list_converted
-            # 對 match_target 列表中的每個目標進行迭代處理
+        # 精簡迴圈結構，減少重複計算
+        for tmp_data in tmp_data_converted:
             for target in match_target:
-                closest_matches_list = self.__find_closest_matches(match_target=target, data_dicts=tmp_data, comparison_column=comparison_column)
+                closest_matches_list = self.__find_closest_matches(match_target=target, column_data=tmp_data, n=comparison_column)
                 for closest_matches in closest_matches_list:
                     fuzzy_comparison_result_dict = {
-                        "UUID_Request": tmp_table_data["UUID_Request"],
-                        "MISSION_NAME": tmp_table_data["MISSION_NAME"],
-                        "JOB_ID": tmp_table_data["JOB_ID"],
-                        "JOB_NAME": tmp_table_data["JOB_NAME"],
+                        "UUID_Request": tmp_data["UUID_Request"],
+                        "MISSION_NAME": tmp_data["MISSION_NAME"],
+                        "JOB_ID": tmp_data["JOB_ID"],
+                        "JOB_NAME": tmp_data["JOB_NAME"],
                         "MATCH_TARGET": target,
                         "COLUMN_DATA": closest_matches[0],
                         "SCORE": closest_matches[1]
@@ -83,14 +83,14 @@ class FuzzyComparison(Job):
         Returns:
             list of tuples: 包含最接近匹配項及其分數的列表。
         """
-        # print("data_dicts:", data_dicts)
         column_data = [row[comparison_column] for row in data_dicts if comparison_column in row]
         closest_matches = self.__fuzzy_match(match_target, column_data, n=n)
         return closest_matches
 
     def __fuzzy_match(self, match_target, column_data, n):
         """
-        使用 difflib 對一列數據進行模糊比對，並計算匹配分數。
+        使用 RapidFuzz 對一列數據進行模糊比對，並計算匹配分數。
+        此方法使用了更快的模糊比對算法，並將結果排序返回。
 
         Args:
             match_target (str): 要進行比對的目標字符串。
@@ -100,6 +100,11 @@ class FuzzyComparison(Job):
         Returns:
             list of tuples: 包含最接近匹配項及其分數的列表。
         """
-        match_scores = {item: difflib.SequenceMatcher(None, match_target, item).ratio() for item in column_data}
-        sorted_matches = sorted(match_scores.items(), key=lambda x: x[1], reverse=True)[:n]
+        results = process.extract(match_target, column_data, scorer=fuzz.QRatio, limit=n)
+        sorted_matches = [(result[0], result[1]) for result in results]
+
+        # 用 rapidfuzz 取代 difflib
+        # match_scores = {item: difflib.SequenceMatcher(None, match_target, item).ratio() for item in column_data}
+        # sorted_matches = sorted(match_scores.items(), key=lambda x: x[1], reverse=True)[:n]
+
         return sorted_matches
