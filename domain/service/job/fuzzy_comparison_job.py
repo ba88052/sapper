@@ -32,12 +32,16 @@ class FuzzyComparison(Job):
         Returns:
             GeneralTmpData: 包含最接近匹配項的臨時數據實體。
         """
-        tmp_table_data_list = self.infra_repository.get_general_tmp_table_data(
-            source_table_path=source_table_path, previous_job_id=previous_job_id
-        )
-        
-        # 一次性解析所有数据，提高效率
-        tmp_data_converted = [json.loads(tmp_data["TMP_DATA"]) for tmp_data in tmp_table_data_list]
+        # === MODIFIED START: 2023-05-28 ===
+        # tmp_table_data_list = self.infra_repository.get_general_tmp_table_data(
+        #     source_table_path=source_table_path, previous_job_id=previous_job_id
+        # )
+
+        # 20240528 修改成直接從 compare_table_path 取得，前面不跑customize_select
+        tmp_data = self.infra_repository.customize_select_from_source_table(
+            source_table_path=source_table_path)
+        print("tmp_data", tmp_data)
+        # === MODIFIED END: 2023-05-28 ===
         
         # 確保 match_target 是一個列表
         match_target = order_data["match_target"]
@@ -48,23 +52,28 @@ class FuzzyComparison(Job):
         closest_match_data_list = []
 
         # 精簡迴圈結構，減少重複計算
-        for tmp_data in tmp_data_converted:
-            for target in match_target:
-                closest_matches_list = self.__find_closest_matches(match_target=target, column_data=tmp_data, n=comparison_column)
-                for closest_matches in closest_matches_list:
-                    fuzzy_comparison_result_dict = {
-                        "UUID_Request": tmp_data["UUID_Request"],
-                        "MISSION_NAME": tmp_data["MISSION_NAME"],
-                        "JOB_ID": tmp_data["JOB_ID"],
-                        "JOB_NAME": tmp_data["JOB_NAME"],
-                        "MATCH_TARGET": target,
-                        "COLUMN_DATA": closest_matches[0],
-                        "SCORE": closest_matches[1]
-                    }
-                    fuzzy_comparison_result_dict_list.append(fuzzy_comparison_result_dict)
-                closest_match_data = next((item for item in tmp_data if item[comparison_column] == closest_matches_list[0][0]), None)
-                closest_match_data_list.append(closest_match_data)
-            print("fuzzy_comparison_result_dict_list", fuzzy_comparison_result_dict_list)
+        # === MODIFIED START: 2023-05-28 ===
+        # for tmp_table_data in tmp_table_data_list:
+            # tmp_data_list = tmp_table_data["TMP_DATA"]
+            # tmp_data_list_coverted = json.loads(tmp_data_list)
+            # tmp_data = tmp_data_list_coverted
+        for target in match_target:
+            closest_matches_list = self.__find_closest_matches(match_target=target, data_dicts=tmp_data, comparison_column=comparison_column)
+            for closest_matches in closest_matches_list:
+                fuzzy_comparison_result_dict = {
+                    # "UUID_Request": tmp_table_data["UUID_Request"],
+                    # "MISSION_NAME": tmp_table_data["MISSION_NAME"],
+                    # "JOB_ID": tmp_table_data["JOB_ID"],
+                    # "JOB_NAME": tmp_table_data["JOB_NAME"],
+                    "MATCH_TARGET": target,
+                    "COLUMN_DATA": closest_matches[0],
+                    "SCORE": closest_matches[1]
+                }
+                fuzzy_comparison_result_dict_list.append(fuzzy_comparison_result_dict)
+            closest_match_data = next((item for item in tmp_data if item[comparison_column] == closest_matches_list[0][0]), None)
+            closest_match_data_list.append(closest_match_data)
+        print("fuzzy_comparison_result_dict_list", fuzzy_comparison_result_dict_list)
+        # === MODIFIED END: 2023-05-28 ===
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=fuzzy_comparison_result_dict_list)
         
         print("closest_match_data_list", closest_match_data_list)

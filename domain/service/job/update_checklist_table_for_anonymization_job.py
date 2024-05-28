@@ -38,7 +38,7 @@ class UpdateCheckListTableJob(Job):
         }
 
         #只是for anamization 使用，用於刪除check_list_summary中的動作，不使用時請刪除這段有點醜的程式
-        delete_sql = self.generate_delete_sql()
+        delete_sql = self.generate_delete_sql(dataset_name=dataset_name)
         self.infra_repository.run_query(delete_sql)
 
         # 轉換更新資料為JSON格式並封裝到GeneralTmpData中
@@ -70,11 +70,11 @@ class UpdateCheckListTableJob(Job):
         today_date = datetime.now().strftime("%Y-%m-%d")
         
         sql = f"""
-        DELETE FROM `"LOG_DATASET.OTHER_CHECKSUMMARY"`
+        DELETE FROM `LOG_DATASET.OTHER_CHECKSUMMARY`
         WHERE BQ_DATE = '{today_date}'
         AND DATASET = '{dataset_name}'
-        AND STATUS = 1
-        AND REMARK = 1
+        AND STATUS = '1'
+        AND REMARK = '1'
         """
         
         return sql

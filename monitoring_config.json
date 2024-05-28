@@ -24,7 +24,7 @@
         "liaison":{
             "get_mission_process_config_data":"01",
             "save_previous_job_status_log":"02",
-            "generator_next_job_command":"03",
+            "generate_next_job_command":"03",
             "save_next_job_status_log":"04",
             "send_next_job_command":"05",
             "report_mission_status":"06",

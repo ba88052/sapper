@@ -171,12 +171,11 @@ class SapperApplicationService:
         """
         if not isinstance(general_tmp_data_entity_list, list):
             general_tmp_data_entity_list = [general_tmp_data_entity_list]
-        for general_tmp_data_entity in general_tmp_data_entity_list:
-            self.application_infra_repository.save_general_tmp_data(
-                destination_table_path=self.request_message_entity.DESTINATION_TABLE_PATH,
-                general_tmp_data_entity=general_tmp_data_entity,
-                use_tmp_table=self.request_message_entity.USE_GENERAL_TMP_TABLE,
-            )
+        self.application_infra_repository.save_general_tmp_data(
+            destination_table_path=self.request_message_entity.DESTINATION_TABLE_PATH,
+            general_tmp_data_entity_list=general_tmp_data_entity_list,
+            use_tmp_table=self.request_message_entity.USE_GENERAL_TMP_TABLE,
+        )
 
     @FlowErrorHandler.flow_log_decorator
     def report_job(self):

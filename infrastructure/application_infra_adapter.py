@@ -21,7 +21,7 @@ class ApplicationRepositoryAdapter(ApplicationInfraPort):
         )
 
     def save_general_tmp_data(
-        self, destination_table_path, general_tmp_data_entity, use_tmp_table
+        self, destination_table_path, general_tmp_data_entity_list, use_tmp_table
     ):
         """把實體化後的Entity資料，存入DB
 
@@ -30,5 +30,5 @@ class ApplicationRepositoryAdapter(ApplicationInfraPort):
             raw_data (class): 參照服務對應的raw_data_entity
         """
         DestinationTableRepository(destination_table_path=destination_table_path).save(
-            general_tmp_data_entity=general_tmp_data_entity, use_tmp_table=use_tmp_table
+            general_tmp_data_entity_list=general_tmp_data_entity_list, use_tmp_table=use_tmp_table
         )

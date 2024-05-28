@@ -14,8 +14,9 @@ class DestinationTableRepository(BqClient):
         super().__init__()
         # self.bigquery_table_id = f"{self.project}.{self.dataset}.{self.table}"
         self.bigquery_table_id = destination_table_path
+        self.table_schema = self.__get_table_schema(self.bigquery_table_id)
 
-    def save(self, general_tmp_data_entity, use_tmp_table):
+    def save(self, general_tmp_data_entity_list, use_tmp_table):
         """
         把 general_tmp_data_entity 存到bq
 
@@ -23,37 +24,55 @@ class DestinationTableRepository(BqClient):
             general_tmp_data_entity (general_tmp_data_entity實體)
             use_tmp_table(Booling):是否使用暫存表，使用表示還有下一個動作
         """
-        print("use_tmp_table", use_tmp_table)
-        if use_tmp_table == True:
-            general_tmp_data_dict = self.__convert_to_tmp_table_format(
-                general_tmp_data_entity
-            )
-            insertion_errors = self.client.insert_rows_json(
-                self.bigquery_table_id, [general_tmp_data_dict]
-            )
-            if insertion_errors:
-                print(
-                    f"Errors occurred while storing destination_data_dict to BigQuery: {insertion_errors}"
-                )
-            else:
-                print("destination_data_dict stored successfully to BigQuery.")
-        else:
-            for destination_data in general_tmp_data_entity.TMP_DATA:
-                print("destination_data", destination_data)
-                print("destination_data_type", type(destination_data))
-                destination_data_dict = self.__convert_to_destination_table_format(
-                    table_id=self.bigquery_table_id, destination_data=destination_data
-                )
-                insertion_errors = self.client.insert_rows_json(
-                    self.bigquery_table_id, [destination_data_dict]
-                )
+        data_to_insert = []
 
-                if insertion_errors:
-                    print(
-                        f"Errors occurred while storing destination_data_dict to BigQuery: {insertion_errors}"
-                    )
-                else:
-                    print("destination_data_dict stored successfully to BigQuery.")
+        for general_tmp_data_entity in general_tmp_data_entity_list:
+            if use_tmp_table == True:
+                # 转换格式并收集待插入的数据
+                general_tmp_data_dict = self.__convert_to_tmp_table_format(general_tmp_data_entity)
+                data_to_insert.append(general_tmp_data_dict)
+            else:
+                # 优化点：批量处理 TMP_DATA，减少插入次数
+                for destination_data in general_tmp_data_entity.TMP_DATA:
+                    destination_data_dict = self.__convert_to_destination_table_format(destination_data)
+                    data_to_insert.append(destination_data_dict)
+
+        insertion_errors = self.client.insert_rows_json(self.bigquery_table_id, data_to_insert)
+        if insertion_errors:
+            print(f"Errors occurred while storing data to BigQuery: {insertion_errors}")
+        else:
+            print("Data stored successfully to BigQuery.")
+
+        # if use_tmp_table == True:
+        #     general_tmp_data_dict = self.__convert_to_tmp_table_format(
+        #         general_tmp_data_entity
+        #     )
+        #     insertion_errors = self.client.insert_rows_json(
+        #         self.bigquery_table_id, [general_tmp_data_dict]
+        #     )
+        #     if insertion_errors:
+        #         print(
+        #             f"Errors occurred while storing destination_data_dict to BigQuery: {insertion_errors}"
+        #         )
+        #     else:
+        #         print("destination_data_dict stored successfully to BigQuery.")
+        # else:
+        #     for destination_data in general_tmp_data_entity.TMP_DATA:
+        #         print("destination_data", destination_data)
+        #         print("destination_data_type", type(destination_data))
+        #         destination_data_dict = self.__convert_to_destination_table_format(
+        #             table_id=self.bigquery_table_id, destination_data=destination_data
+        #         )
+        #         insertion_errors = self.client.insert_rows_json(
+        #             self.bigquery_table_id, [destination_data_dict]
+        #         )
+
+        #         if insertion_errors:
+        #             print(
+        #                 f"Errors occurred while storing destination_data_dict to BigQuery: {insertion_errors}"
+        #             )
+        #         else:
+        #             print("destination_data_dict stored successfully to BigQuery.")
 
     def __get_table_schema(self, table_id):
         """
@@ -68,10 +87,10 @@ class DestinationTableRepository(BqClient):
 
         table = self.client.get_table(table_id)
         schema_field_names = {field.name for field in table.schema}
-        print("schema", schema_field_names)
+        # print("schema", schema_field_names)
         return schema_field_names
 
-    def __convert_to_destination_table_format(self, table_id, destination_data):
+    def __convert_to_destination_table_format(self, destination_data):
         """
         # 比對 JSON 資料與 schema，填充缺失的欄位
 
@@ -90,9 +109,8 @@ class DestinationTableRepository(BqClient):
         destination_data["BQ_CREATED_TIME"] = bq_created_time_str
         destination_data["BQ_UPDATED_TIME"] = bq_updated_time_str
         destination_data["PARTITION_DATE"] = partition_date
-        schema_field_names = self.__get_table_schema(table_id)
         filled_data = {}
-        for field in schema_field_names:
+        for field in self.table_schema:
             # 如果該欄位在 destination_data 中存在，則使用其值，否則使用預設值 ""
             filled_data[field] = destination_data.get(field, "")
         print(filled_data)
