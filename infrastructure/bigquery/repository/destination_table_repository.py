@@ -29,7 +29,7 @@ class DestinationTableRepository(BqClient):
                 general_tmp_data_dict = self.__convert_to_tmp_table_format(general_tmp_data_entity)
                 data_to_insert.append(general_tmp_data_dict)
             else:
-                UUID_Request = general_tmp_data_entity.MISSION_ID
+                UUID_Request = general_tmp_data_entity.UUID_Request
                 MISSION_NAME = general_tmp_data_entity.MISSION_NAME
                 JOB_NAME = general_tmp_data_entity.JOB_NAME
                 JOB_ID = general_tmp_data_entity.JOB_ID
