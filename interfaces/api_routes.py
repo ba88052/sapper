@@ -1,6 +1,7 @@
 import traceback
 import base64
 import json
+import logging
 
 from flask import Blueprint, g, make_response, request
 
@@ -43,7 +44,8 @@ def execute_collect_mission():
     except Exception as e:
         error_info = str(e) + traceback.format_exc()
         error_info = error_info.replace("\n", "")
-        print("ERROR_INFO:", error_info)
+        # print("ERROR_INFO:", error_info)
+        logging.info("ERROR_INFO:", error_info)
         return make_response((f"fail", 204))
 
 

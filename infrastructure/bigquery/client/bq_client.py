@@ -1,7 +1,10 @@
 import json
 
+import pandas as pd
 from google.cloud import bigquery
+from google.auth import default
 
+# from infrastructure.config_handler import LIAISON_INFRA_CONFIG
 
 
 class BqClient:
@@ -10,10 +13,13 @@ class BqClient:
     """
 
     def __init__(self):
-        # 避免循環import
-        from infrastructure.config_handler import INFRA_CONFIG
-        self.project = INFRA_CONFIG["bigquery"]["project_name"]
-        self.client = bigquery.Client(self.project)
+        # 為了避免循環導入，把參數檔的導入移動到內部
+        from infrastructure.config_handler import LIAISON_INFRA_CONFIG
+        _, project_id = default()
+        self.project = project_id
+        # self.project = LIAISON_INFRA_CONFIG["bigquery"]["project_name"]
+        # self.client = bigquery.Client(self.project)
+        self.client = bigquery.Client()
 
     # 執行 SQL 查詢並返回結果的 DataFrame。
     def run_query(self, query):

@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timezone
+import time
 
 from infrastructure.bigquery.client.bq_client import BqClient
 from infrastructure.config_handler import INFRA_CONFIG
@@ -37,11 +38,20 @@ class DestinationTableRepository(BqClient):
                     destination_data_dict = self.__convert_to_destination_table_format(destination_data, UUID_Request, MISSION_NAME, JOB_NAME, JOB_ID)
                     data_to_insert.append(destination_data_dict)
 
-        insertion_errors = self.client.insert_rows_json(self.bigquery_table_id, data_to_insert)
+        chunk_size = 3000
+        insertion_errors = []
+
+        for i in range(0, len(data_to_insert), chunk_size):
+            errors = self.client.insert_rows_json(self.bigquery_table_id, data_to_insert[i:i + chunk_size])
+            time.sleep(1)
+            if errors:
+                insertion_errors.extend(errors)
+
         if insertion_errors:
-            print(f"Errors occurred while storing data to BigQuery: {insertion_errors}")
+            print(f"Errors occurred: {insertion_errors}")
+            raise Exception(insertion_errors)
         else:
-            print("Data stored successfully to BigQuery.")
+            print("All data inserted successfully.")
 
     def __get_table_schema(self, table_id):
         """
@@ -97,15 +107,17 @@ class DestinationTableRepository(BqClient):
         Returns:
             dict: 可存入tmp表的格式
         """
+        # 將 datetime 對象轉換為 RFC 3339 格式的字符串
         bq_created_time = datetime.now()
         bq_created_time_utc = bq_created_time.replace(tzinfo=timezone.utc)
         bq_created_time_str = bq_created_time_utc.isoformat()
+        bq_created_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
         bq_updated_time_str = bq_created_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
         partition_date = bq_created_time.strftime("%Y-%m-%d")
 
         general_tmp_data_entity.BQ_CREATED_TIME = bq_created_time_str
         general_tmp_data_entity.BQ_UPDATED_TIME = bq_updated_time_str
         general_tmp_data_entity.PARTITION_DATE = partition_date
-
+        # 把class轉dict
         bq_dict = vars(general_tmp_data_entity)
         return bq_dict

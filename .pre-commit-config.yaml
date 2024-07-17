@@ -1,0 +1,8 @@
+# default_language_version:
+#   python: python3
+repos:
+- repo: https://github.com/pycqa/flake8
+  rev: 6.1.0
+  hooks:
+  - id: flake8
+    args: ["--select=F403,F821,F822,F823,E901"]      

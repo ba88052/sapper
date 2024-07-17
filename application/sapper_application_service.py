@@ -7,6 +7,7 @@ from domain.domain_infra_port import DomainInfraPort
 from domain.entity.request_message_entity import RequestMessage
 from domain.service.error_handling import FlowErrorHandler
 from domain.service.job_selector import JobSelectorDomainService
+import logging
 
 
 class SapperApplicationService:
@@ -89,6 +90,7 @@ class SapperApplicationService:
             error_info = str(e) + traceback.format_exc()
             error_info = error_info.replace("\n", "")
             self.report_message["job_status"] = "Fail"
+            logging.info("ERROR_INFO:", error_info)
             # print("ERROR_INFO:", error_info)
         
         # Task 5

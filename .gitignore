@@ -2,6 +2,45 @@ application/sapper_application_service copy 2.py
 application/sapper_application_service copy.py
 .git_lab/
 .git_hub/
+.git_h/
 .DS_Store
 .Pipfile
 .Pipfile.lock
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env*/
+dbt_env/
+build/
+!tests/functional/build
+!core/dbt/docs/build
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.mypy_cache/
+.dmypy.json
+logs/
+.user.yml
+profiles.yml
+
+
+
+# ipynb_checkpoints
+.ipynb_checkpoints

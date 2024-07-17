@@ -13,7 +13,7 @@ class ReportJobCompletedRepository(PubSubClient):
         """
         message = json.dumps(message, default=str)
         data = message.encode("utf-8")
-        topic_path = self.client.topic_path(self.project_id, report_return_path)
+        topic_path = self.client.topic_path(self.project, report_return_path)
         print("report_return_path", report_return_path)
         print("topic_path", topic_path)
         print(data)

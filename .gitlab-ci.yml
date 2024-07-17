@@ -1,0 +1,55 @@
+image: ubuntu:20.04
+
+# stages:          # List of stages for jobs, and their order of execution
+#    - changelog
+#    - merge
+
+
+
+deploy_main_to_deploy_and_hotfix:
+  # stage: merge
+  before_script:
+    - apt-get update -y && apt-get install -y git
+  script:
+    - cd $CI_PROJECT_DIR
+    - git config user.email "you@example.com"
+    - git config user.name "Your Name"
+    - git checkout main
+    - git pull origin main
+    - git checkout -B deploy  # Rebuild deploy branch
+    - git merge  main
+
+    # Delete all files except for .py files, Dockerfile, and requirements.txt
+    - find . -type f ! -name "*.py" ! -name "Dockerfile" ! -name "requirements.txt" ! -path "./.git/*" ! -name "*.json" -delete
+
+    # Create start.sh
+    - echo "#!/bin/bash" > start.sh
+    - echo "gunicorn --timeout 0 main:app" >> start.sh
+    - git add -A
+
+    # Commit changes
+    - git commit -m "Clean up deploy branch and add start.sh" || true
+    - git push "https://outh2:$GITLAB_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH" deploy --force
+    - git checkout hotfix || git checkout -b hotfix
+    - git merge main
+    - git push "https://outh2:$GITLAB_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH" hotfix 
+  only:
+    - main 
+
+
+deploy_hotfix_to_main:
+  # stage: merge
+  before_script:
+    - apt-get update -y && apt-get install -y git
+  script:
+    - cd $CI_PROJECT_DIR
+    - git config user.email "you@example.com"
+    - git config user.name "Your Name"
+    - git checkout hotfix
+    - git pull origin hotfix
+    - git checkout main
+    - git pull origin main
+    - git merge hotfix
+    - git push "https://outh2:$GITLAB_ACCESS_TOKEN@$CI_SERVER_HOST/$CI_PROJECT_PATH" main  
+  only:
+    - hotfix 

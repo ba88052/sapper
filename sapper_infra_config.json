@@ -1,6 +1,5 @@
 {
     "bigquery": {
-        "project_name": "vn-loancloudmvp-data",
         "log":{
             "dataset_name": "LOG_DATASET",
             "flow_log_table_name": "FLOW_LOG"
@@ -11,10 +10,8 @@
         }
     },
     "pubsub": {
-        "project_name": "vn-loancloudmvp-data"
     },
     "gcs": {
-        "project_name": "vn-loancloudmvp-data",
         "bucket_name": "cdcda_sam"
     }
 }
