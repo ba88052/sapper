@@ -36,5 +36,5 @@ class DomainInfraPort:
         """
         pass
     
-    def run_query(self):
+    def run_query(self, query):
         pass

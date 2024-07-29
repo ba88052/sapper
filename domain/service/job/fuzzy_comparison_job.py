@@ -75,8 +75,12 @@ class FuzzyComparison(Job):
         print("fuzzy_comparison_result_dict_list", fuzzy_comparison_result_dict_list)
         # === MODIFIED END: 2023-05-28 ===
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=fuzzy_comparison_result_dict_list)
+
         
         print("closest_match_data_list", closest_match_data_list)
+        closest_match_data_list = self.filter_today_results(closest_match_data_list = closest_match_data_list)
+
+        print("closest_match_data_list_2", closest_match_data_list)
         return general_tmp_data_entity, closest_match_data_list
 
     def __find_closest_matches(self, match_target, data_dicts, comparison_column, n=100):
@@ -117,3 +121,43 @@ class FuzzyComparison(Job):
         # sorted_matches = sorted(match_scores.items(), key=lambda x: x[1], reverse=True)[:n]
 
         return sorted_matches
+    
+
+    def filter_today_results(self, closest_match_data_list):
+        """
+        根據今天的結果過濾 closest_match_data_list，只保留不在今天結果中的項目。
+
+        Returns:
+            list: 經過過濾的新列表，只包含今天結果中沒有的公司。
+        """
+        # 確保從函式參數傳入 closest_match_data_list
+
+        query = """
+            SELECT
+                COLUMN_DATA
+            FROM (
+                SELECT
+                    COLUMN_DATA,
+                    ROW_NUMBER() OVER (PARTITION BY MATCH_TARGET ORDER BY SCORE DESC) as rn
+                FROM
+                    `TRANS_EDEP_VIETDATA_DATASET.TMP_COMPANY_COMPARISON_RESULT`
+                WHERE
+                    PARTITION_DATE BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND CURRENT_DATE()
+            ) tmp
+            WHERE rn = 1;
+        """
+       
+        # 執行查詢並獲取結果
+        today_result = self.infra_repository.run_query(query)
+        print("today_result", today_result)
+
+        # 取得今天結果中的公司名稱
+        if today_result:
+            today_company_names = [result["COLUMN_DATA"] for result in today_result]
+            print("today_company_names", today_company_names)
+
+            # 建立新的列表，只加入不在今天結果中的項目
+            new_closest_match_data_list = [i for i in closest_match_data_list if i["COMPANY_NAME"] not in today_company_names]
+
+            return new_closest_match_data_list
+        return closest_match_data_list

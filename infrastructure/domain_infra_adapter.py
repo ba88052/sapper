@@ -74,4 +74,4 @@ class DomainRepositoryAdapter(DomainInfraPort):
         Args:
             query (_type_): _description_
         """
-        BqClient().run_query(query=query)
+        return BqClient().run_query(query=query)
