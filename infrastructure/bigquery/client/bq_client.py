@@ -14,7 +14,7 @@ class BqClient:
 
     def __init__(self):
         # 為了避免循環導入，把參數檔的導入移動到內部
-        from infrastructure.config_handler import LIAISON_INFRA_CONFIG
+        # from infrastructure.config_handler import LIAISON_INFRA_CONFIG
         _, project_id = default()
         self.project = project_id
         # self.project = LIAISON_INFRA_CONFIG["bigquery"]["project_name"]

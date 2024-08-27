@@ -1,5 +1,4 @@
 from rapidfuzz import process, fuzz
-import json
 
 from domain.domain_infra_port import DomainInfraPort
 from domain.entity.general_tmp_data_entity import GeneralTmpData
@@ -33,10 +32,6 @@ class FuzzyComparison(Job):
             GeneralTmpData: 包含最接近匹配項的臨時數據實體。
         """
         # === MODIFIED START: 2023-05-28 ===
-        # tmp_table_data_list = self.infra_repository.get_general_tmp_table_data(
-        #     source_table_path=source_table_path, previous_job_id=previous_job_id
-        # )
-
         # 20240528 修改成直接從 compare_table_path 取得，前面不跑customize_select
         tmp_data = self.infra_repository.customize_select_from_source_table(
             source_table_path=source_table_path)
@@ -53,25 +48,19 @@ class FuzzyComparison(Job):
 
         # 精簡迴圈結構，減少重複計算
         # === MODIFIED START: 2023-05-28 ===
-        # for tmp_table_data in tmp_table_data_list:
-            # tmp_data_list = tmp_table_data["TMP_DATA"]
-            # tmp_data_list_coverted = json.loads(tmp_data_list)
-            # tmp_data = tmp_data_list_coverted
         for target in match_target:
             closest_matches_list = self.__find_closest_matches(match_target=target, data_dicts=tmp_data, comparison_column=comparison_column)
             for closest_matches in closest_matches_list:
                 fuzzy_comparison_result_dict = {
-                    # "UUID_Request": tmp_table_data["UUID_Request"],
-                    # "MISSION_NAME": tmp_table_data["MISSION_NAME"],
-                    # "JOB_ID": tmp_table_data["JOB_ID"],
-                    # "JOB_NAME": tmp_table_data["JOB_NAME"],
                     "MATCH_TARGET": target,
                     "COLUMN_DATA": closest_matches[0],
                     "SCORE": closest_matches[1]
                 }
                 fuzzy_comparison_result_dict_list.append(fuzzy_comparison_result_dict)
             closest_match_data = next((item for item in tmp_data if item[comparison_column] == closest_matches_list[0][0]), None)
+            closest_match_data["MATCH_TARGET"] = target
             closest_match_data_list.append(closest_match_data)
+            closest_match_data_list = [dict(t) for t in {tuple(d.items()) for d in closest_match_data_list}]
         print("fuzzy_comparison_result_dict_list", fuzzy_comparison_result_dict_list)
         # === MODIFIED END: 2023-05-28 ===
         general_tmp_data_entity = GeneralTmpData(TMP_DATA=fuzzy_comparison_result_dict_list)
@@ -122,42 +111,66 @@ class FuzzyComparison(Job):
 
         return sorted_matches
     
-
+    # === MODIFIED START: 2023-08-15 ===
     def filter_today_results(self, closest_match_data_list):
         """
-        根據今天的結果過濾 closest_match_data_list，只保留不在今天結果中的項目。
+        根據今天的結果過濾 closest_match_data_list，只保留 MATCH_TARGET 和 COMPANY_NAME 都相同的項目，或 MATCH_TARGET 不同的項目。
+        簡單來說，這是為了避免重複的結果，所以以客戶填寫的公司名稱（MATCH_TARGET）當作類似唯一ID
+        如果比對的結果（在比對表是COLUMN_DATA，在記憶體中是COMPANY_NAME）一樣，且唯一ID不同，表示是重複的結果，所以拋棄。
+        如果比對的結果一樣，但是MATCH_TARGET一樣，表示這是同一個ID，查詢FInancial跟Comany Info的結果，所以保留。
+        之所以會這樣改，主要是卡在時程關係，更好的做法應該是有一張表在打出去API後，紀錄他打了什麼，之後每一次打之前都可以做比對。
 
         Returns:
-            list: 經過過濾的新列表，只包含今天結果中沒有的公司。
+            list: 經過過濾的新列表。
         """
-        # 確保從函式參數傳入 closest_match_data_list
 
         query = """
-            SELECT
-                COLUMN_DATA
-            FROM (
                 SELECT
                     COLUMN_DATA,
-                    ROW_NUMBER() OVER (PARTITION BY MATCH_TARGET ORDER BY SCORE DESC) as rn
-                FROM
-                    `TRANS_EDEP_VIETDATA_DATASET.TMP_COMPANY_COMPARISON_RESULT`
-                WHERE
-                    PARTITION_DATE BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND CURRENT_DATE()
-            ) tmp
-            WHERE rn = 1;
+                    MATCH_TARGET
+                FROM (
+                    SELECT
+                        MATCH_TARGET,
+                        COLUMN_DATA,
+                        SCORE,
+                        ROW_NUMBER() OVER (
+                            PARTITION BY MATCH_TARGET
+                            ORDER BY CAST(SCORE AS FLOAT64) DESC
+                        ) as rn
+                    FROM
+                        `TRANS_EDEP_VIETDATA_DATASET.TMP_COMPANY_COMPARISON_RESULT`
+                    WHERE
+                        PARTITION_DATE BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 6 DAY) AND CURRENT_DATE()
+                ) tmp
+                WHERE rn = 1
         """
-       
+        
         # 執行查詢並獲取結果
         today_result = self.infra_repository.run_query(query)
         print("today_result", today_result)
 
-        # 取得今天結果中的公司名稱
-        if today_result:
-            today_company_names = [result["COLUMN_DATA"] for result in today_result]
-            print("today_company_names", today_company_names)
+        # 建立新的列表，只保留符合條件的項目
+        new_closest_match_data_list = []
+        
+        for item in closest_match_data_list:
+            match_company_name = item["COMPANY_NAME"]
+            match_target = item["MATCH_TARGET"]
+            print(match_company_name, match_target)
+            
+            # 檢查這包中的 company_name 中是否有對應的 COLUMN_DATA 
+            matching_items = [
+                today_item for today_item in today_result
+                if today_item["COLUMN_DATA"] == match_company_name
+            ]
+            
+            print(matching_items)
+            if matching_items:
+                # 如果 COLUMN_DATA 找到匹配，再檢查 MATCH_TARGET，如果一樣則保留
+                if any(today_item["MATCH_TARGET"] == match_target for today_item in matching_items):
+                    new_closest_match_data_list.append(item)
+            else:
+                # 如果 COLUMN_DATA 不存在匹配項目，保留該company_name
+                new_closest_match_data_list.append(item)
 
-            # 建立新的列表，只加入不在今天結果中的項目
-            new_closest_match_data_list = [i for i in closest_match_data_list if i["COMPANY_NAME"] not in today_company_names]
-
-            return new_closest_match_data_list
-        return closest_match_data_list
+        return new_closest_match_data_list
+    # === MODIFIED END: 2023-08-15 ===
